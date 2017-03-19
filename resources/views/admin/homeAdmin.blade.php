@@ -6,25 +6,43 @@
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
-                <table>
+
+
+
+
+                <table class="table">
                     <thead>
                         <tr>
-                            <th>Name</th>
-                            <th>Email</th>
+                            <th>Username</th>
+                            <th>Show</th>
+                            <th>Edit</th>
+                            <th>Delete</th>
+                            <th>Status</th>
                         </tr>
                     </thead>
-                    @foreach($users as $user)
                     <tbody>
+                    @foreach($users as $user)
                         <tr>
                             <td>{{ $user->name }}</td>
-                            <td>{{ $user->email }}</td>
+                            <td><a class="btn btn-primary" href="admin/users/{{ $user->id }}">Show</a></td>
+                            <td><a class="btn btn-info" href="admin/users/{{ $user->id }}/edit">Edit</a></td>
+                            <td><a class="btn btn-danger" href="admin/users/{{ $user->id }}">Delete</a></td>
+                            <!-- jeigu 1, useris uzblokuotas -->
+                            @if($user->status == 1) 
+                                <td><a class="btn btn-success" href="">Unblock</a></td>
+                            @else
+                                <td><a class="btn btn-danger" href="">Block</a></td>
+                            @endif
+                            
                         </tr>
-                    </tbody>
                     @endforeach
+                    </tbody>
                 </table>
-            </div>
-        </div>
+
+
     </div>
+</div>
+</div>
 </div>
 
 @endsection
