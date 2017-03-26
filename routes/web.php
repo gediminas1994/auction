@@ -24,9 +24,19 @@ Route::group(['prefix' => 'items'], function () {
     Route::get('/show/{item}', ['as' => 'items.show', 'uses' => 'ItemsController@show']);
 });
 
-Route::group(['prefix' => 'admin', 'namespace' => 'admin'], function (){
-	Route::get('/users/{user}', ['uses' => 'UsersController@show']);
-	Route::get('/users/{user}/edit', ['uses' => 'UsersController@show']);
-	Route::patch('/users/{user}', ['uses' => 'UsersController@update']);
-	Route::delete('/users/{user}', ['uses' => 'UsersController@delete']);
+Route::group(['prefix' => 'admin', 'namespace' => 'admin', 'middleware' => 'auth'], function (){
+    Route::group(['prefix' => 'users'], function () {
+        Route::get('/', ['as' => 'admin.users.index', 'uses' => 'UsersController@index']);
+        Route::get('/{user}', ['as' => 'admin.users.show', 'uses' => 'UsersController@show']);
+        Route::get('/{user}/edit', ['as' => 'admin.users.edit', 'uses' => 'UsersController@show']);
+        Route::patch('/{user}', ['as' => 'admin.users.update', 'uses' => 'UsersController@update']);
+        Route::delete('/{user}', ['as' => 'admin.users.delete', 'uses' => 'UsersController@delete']);
+    });
+});
+
+Route::group(['prefix' => 'user', 'namespace' => 'user', 'middleware' => 'auth'], function () {
+    Route::get('/{user}', ['as' => 'user.show', 'uses' => 'UsersController@show']);
+    Route::get('/{user}/edit', ['as' => 'user.edit', 'uses' => 'UsersController@show']);
+    Route::patch('/{user}', ['as' => 'user.update', 'uses' => 'UsersController@update']);
+    Route::delete('/{user}', ['as' => 'user.delete', 'uses' => 'UsersController@delete']);
 });

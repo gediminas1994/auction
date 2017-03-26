@@ -28,9 +28,9 @@ class HomeController extends Controller
         $users = User::where('user_type', '=', '1')->get();
 
         if (Auth::user()->user_type === 0) {
-            return view('admin.homeAdmin')->with('users', $users);
+            return view('admin.home')->with('users', $users);
         }else{
-            return view('home');
+            return view('user.home');
         }
     }
 }

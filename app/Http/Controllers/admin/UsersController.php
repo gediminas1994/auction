@@ -8,8 +8,13 @@ use App\User;
 
 class UsersController extends Controller
 {
+    public function index(){
+        $users = User::all();
+        return view('admin.users.index')->with('users', $users);
+    }
+
     public function show($id){
     	$user = User::findOrFail($id);
-    	return view('user.show')->with('user', $user);
+    	return view('admin.users.show')->with('user', $user);
     }
 }
