@@ -63,6 +63,10 @@
                                     <a href="{{ route('user.show', Auth::user()) }}">
                                         Profile
                                     </a>
+                                    <a href="{{ route('user.bankAccounts', Auth::user()) }}">
+                                        Bank Accounts
+                                    </a>
+
                                     @if(!Auth::user()->blocked)
                                         <a href="{{ route('items.create') }}">
                                             Create Item

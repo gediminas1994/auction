@@ -35,8 +35,10 @@ Route::group(['prefix' => 'admin', 'namespace' => 'admin', 'middleware' => 'auth
 });
 
 Route::group(['prefix' => 'user', 'namespace' => 'user', 'middleware' => 'auth'], function () {
+    //user info
     Route::get('/{user}', ['as' => 'user.show', 'uses' => 'UsersController@show']);
     Route::get('/{user}/edit', ['as' => 'user.edit', 'uses' => 'UsersController@show']);
     Route::patch('/{user}', ['as' => 'user.update', 'uses' => 'UsersController@update']);
-    Route::delete('/{user}', ['as' => 'user.delete', 'uses' => 'UsersController@delete']);
+    //user bank Accounts
+    Route::get('/{user}/bankAccounts', ['as' => 'user.bankAccounts', 'uses' => 'BankAccountsController@index']);
 });

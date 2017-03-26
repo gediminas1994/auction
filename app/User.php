@@ -32,4 +32,8 @@ class User extends Authenticatable
     {
         return $this->hasOne('App\User_Profile');
     }
+
+    public function bankAccount(){
+        return $this->hasMany('App\BankAccount');
+    }
 }
