@@ -2,11 +2,7 @@
 
 @section('content')
 
-	{{--<script>
-        $('#select-state').selectize({
-            maxItems: 3
-        });
-	</script>--}}
+
 
 <div class="container">
 	<form class="form-horizontal">
@@ -28,7 +24,7 @@
 		<div class="form-group">
 			<label for="type" class="col-sm-2 control-label">Type</label>
 			<div class="col-sm-10">
-				<select class="form-control" id="type">
+				<select id="select-state">
 					@foreach($categories as $category)
 						<optgroup label="{{$category->title}}">
 							@foreach($subcategories as $subcategory)
@@ -42,37 +38,12 @@
 			</div>
 		</div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-		{{--<div class="form-group">
-			<select id="select-state">
-				<option value="volvo">Volvo</option>
-				<option value="saab">Saab</option>
-				<option value="mercedes">Mercedes</option>
-				<option value="audi">Audi</option>
-			</select>
-		</div>--}}
-
 		<div class="form-group">
 			<div class="col-sm-offset-2 col-sm-10">
 				<button type="submit" class="btn btn-default">Submit</button>
 			</div>
 		</div>
+
 
 	</form>
 </div>

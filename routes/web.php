@@ -45,5 +45,5 @@ Route::group(['prefix' => 'user', 'namespace' => 'user', 'middleware' => 'auth']
     Route::post('/{user}/bankAccounts', ['as' => 'user.bankAccounts.store', 'uses' => 'BankAccountsController@store']);
     Route::get('/{user}/bankAccounts/{bankRecord}/edit', ['as' => 'user.bankAccounts.edit', 'uses' => 'BankAccountsController@edit']);
     Route::put('/{user}/bankAccounts/{bankRecord}', ['as' => 'user.bankAccounts.update', 'uses' => 'BankAccountsController@update']);
-    Route::delete('/{user}/bankAccounts/{bankRecord}', ['as' => 'user.bankAccounts.destroy', 'uses' => 'BankAccountsController@destroy']);
+    Route::delete('/{user}/bankAccounts/', ['as' => 'user.bankAccounts.destroy', 'uses' => 'BankAccountsController@destroy']);
 });
