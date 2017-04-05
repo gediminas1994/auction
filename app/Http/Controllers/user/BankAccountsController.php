@@ -57,8 +57,7 @@ class BankAccountsController extends Controller
         $bankRecord->save();
 
         Session::flash('message', 'Successfully updated!');
-        $bankAccounts = BankAccount::where('user_id', $user)->get();
-        return view('user.bankAccounts.index')->with('bankAccounts', $bankAccounts);
+        return redirect()->route('user.bankAccounts', Auth::user());
     }
 
     public function destroy($user, $bankRecord){
