@@ -18,4 +18,8 @@ class ItemsController extends Controller
     public function show(Item $item){
     	return view('items.show')->with('item', $item);
     }
+
+    public function store(){
+        dd(request()->all());
+    }
 }

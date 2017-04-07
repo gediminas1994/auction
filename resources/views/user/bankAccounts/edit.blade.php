@@ -6,7 +6,7 @@
             <input type="hidden" name="_method" value="PATCH">
             {{csrf_field()}}
 
-            <div class="form-group">cd
+            <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="client">Bank Name</label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <input type="text" id="bank_name" name="bank_name" required="required" class="form-control col-md-7 col-xs-12" value="{{$bankRecord->bank_name}}" disabled>

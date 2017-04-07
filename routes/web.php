@@ -21,7 +21,8 @@ Route::get('/home', 'HomeController@index');
 
 Route::group(['prefix' => 'items'], function () {
     Route::get('/create', ['as' => 'items.create', 'uses' => 'ItemsController@create']);
-    Route::get('/show/{item}', ['as' => 'items.show', 'uses' => 'ItemsController@show']);
+    Route::get('/{item}', ['as' => 'items.show', 'uses' => 'ItemsController@show']);
+    Route::post('/store', ['as' => 'items.store', 'uses' => 'ItemsController@store']);
 });
 
 Route::group(['prefix' => 'admin', 'namespace' => 'admin', 'middleware' => 'auth'], function (){
