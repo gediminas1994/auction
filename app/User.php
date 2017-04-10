@@ -30,10 +30,14 @@ class User extends Authenticatable
 
     public function profile()
     {
-        return $this->hasOne('App\User_Profile');
+        return $this->hasOne(User_Profile::class);
     }
 
     public function bankAccount(){
-        return $this->hasMany('App\BankAccount');
+        return $this->hasMany(BankAccount::class);
+    }
+
+    public function items(){
+        return $this->hasMany(Item::class);
     }
 }
