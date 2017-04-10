@@ -17,7 +17,12 @@ class CreateItemsTable extends Migration
             $table->increments('id');
             $table->integer('user_id');
             $table->string('title');
+            $table->tinyInteger('type');
             $table->string('description', 500);
+            $table->timestamp('expirationDate');
+            $table->integer('quantity');
+            $table->float('startingBid');
+            $table->string('picture');
             $table->timestamps();
         });
     }

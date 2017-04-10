@@ -10,7 +10,7 @@
 		<div class="form-group">
 			<label for="title" class="col-sm-2 control-label">Title</label>
 			<div class="col-sm-8">
-				<input type="text" class="form-control" name="title" id="title" placeholder="Title">
+				<input type="text" class="form-control" name="title" id="title" placeholder="Title" value="{{ old('title') }}">
 			</div>
 		</div>
 
@@ -18,8 +18,8 @@
 			<label for="type" class="col-sm-2 control-label">Type</label>
 			<div class="col-sm-8">
 				<select class="form-control" id="type" name="type">
-					<option value="0">Auction</option>
-					<option value="1">Regular Item</option>
+					<option value="0" {{ (old('type') == 0 ? 'selected' : '') }}>Auction</option>
+					<option value="1" {{ (old('type') == 1 ? 'selected' : '') }}>Regular Item</option>
 				</select>
 			</div>
 		</div>
@@ -27,7 +27,7 @@
 		<div class="form-group">
 			<label for="description" class="col-sm-2 control-label">Description</label>
 			<div class="col-sm-8">
-				<textarea class="form-control" rows="5" id="description" name="description" placeholder="Description"></textarea>
+				<textarea class="form-control" rows="5" id="description" name="description" placeholder="Description">{{ old('description') }}</textarea>
 			</div>
 		</div>
 
@@ -55,7 +55,7 @@
             <label for="datetimepicker1" class="col-sm-2 control-label">Expiration date</label>
             <div class="col-sm-8">
                 <div class='input-group date' id='datetimepicker1'>
-                    <input type='text' class="form-control" name="dateTime"/>
+                    <input type='text' class="form-control" name="expirationDate"/>
                     <span class="input-group-addon">
                     <span class="glyphicon glyphicon-calendar"></span>
                 </span>
@@ -89,7 +89,11 @@
 						 style="max-width: 200px; max-height: 150px;"></div>
 					<div>
 					<span class="btn btn-default btn-file"><span class="fileinput-new">Select image</span><span
+<<<<<<< HEAD
 								class="fileinput-exists">Change</span><input type="file" name="uploadedPicture"></span>
+=======
+								class="fileinput-exists">Change</span><input type="file" name="picture" id="picture"></span>
+>>>>>>> 5b178bbb2e212e90c6fca23020b0dfbab5d5f53f
 						<a href="#" class="btn btn-default fileinput-exists" data-dismiss="fileinput">Remove</a>
 					</div>
 				</div>
@@ -103,6 +107,8 @@
 		</div>
 
 	</form>
+	@include('partials.errors')
+	@include('partials.messages')
 </div>
 
 @endsection
