@@ -7,9 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 class Item extends Model
 {
 <<<<<<< HEAD
+<<<<<<< HEAD
     public function user(){
         return $this->belongsTo(User::class);
 =======
+=======
+>>>>>>> 5b178bbb2e212e90c6fca23020b0dfbab5d5f53f
     protected $fillable = [
         'user_id',
         'title',
@@ -33,6 +36,9 @@ class Item extends Model
             'picture' => $picturePath
         ]);
         $item->save();
+<<<<<<< HEAD
+>>>>>>> 5b178bbb2e212e90c6fca23020b0dfbab5d5f53f
+=======
 >>>>>>> 5b178bbb2e212e90c6fca23020b0dfbab5d5f53f
     }
 }

@@ -90,7 +90,11 @@
 					<div>
 					<span class="btn btn-default btn-file"><span class="fileinput-new">Select image</span><span
 <<<<<<< HEAD
+<<<<<<< HEAD
 								class="fileinput-exists">Change</span><input type="file" name="uploadedPicture"></span>
+=======
+								class="fileinput-exists">Change</span><input type="file" name="picture" id="picture"></span>
+>>>>>>> 5b178bbb2e212e90c6fca23020b0dfbab5d5f53f
 =======
 								class="fileinput-exists">Change</span><input type="file" name="picture" id="picture"></span>
 >>>>>>> 5b178bbb2e212e90c6fca23020b0dfbab5d5f53f
