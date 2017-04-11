@@ -43,11 +43,11 @@ class ItemsController extends Controller
         if(Input::hasFile('picture')){
             $picture = Input::file('picture');
             $picture->move('items/', $picture->getClientOriginalName());
-            $picturePath = $picture->getClientOriginalName();
+            $picturePath = '/items/' . $picture->getClientOriginalName();
         }
 
-
-        Item::createItem($user_id, $title, $type, $description, $expirationDate, $quantity, $startingBid, $picturePath);
+        $item = new Item();
+        $item->createItem($user_id, $title, $type, $description, $expirationDate, $quantity, $startingBid, $picturePath);
 
         return back()->withInput();
     }

@@ -19,5 +19,7 @@
     "selectize": "^0.12.4",
     "vue": "^2.1.10"
   },
-  "dependencies": {}
+  "dependencies": {
+
+  }
 }

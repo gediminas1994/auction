@@ -75,6 +75,7 @@
                                     <a href="{{ route('user.show', Auth::user()) }}">
                                         Profile
                                     </a>
+
                                     <a href="{{ route('user.bankAccounts', Auth::user()) }}">
                                         Bank Accounts
                                     </a>
@@ -84,6 +85,11 @@
                                             Create Item
                                         </a>
                                     @endif
+
+                                    <a href="{{ route('user.listedItems', Auth::user()) }}">
+                                        My items
+                                    </a>
+
                                     <a href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
