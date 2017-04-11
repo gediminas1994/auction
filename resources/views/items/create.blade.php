@@ -88,16 +88,7 @@
 					<div class="fileinput-preview fileinput-exists thumbnail"
 						 style="max-width: 200px; max-height: 150px;"></div>
 					<div>
-					<span class="btn btn-default btn-file"><span class="fileinput-new">Select image</span><span
-<<<<<<< HEAD
-<<<<<<< HEAD
-								class="fileinput-exists">Change</span><input type="file" name="uploadedPicture"></span>
-=======
-								class="fileinput-exists">Change</span><input type="file" name="picture" id="picture"></span>
->>>>>>> 5b178bbb2e212e90c6fca23020b0dfbab5d5f53f
-=======
-								class="fileinput-exists">Change</span><input type="file" name="picture" id="picture"></span>
->>>>>>> 5b178bbb2e212e90c6fca23020b0dfbab5d5f53f
+					<span class="btn btn-default btn-file"><span class="fileinput-new">Select image</span><span class="fileinput-exists">Change</span><input type="file" name="uploadedPicture"></span>
 						<a href="#" class="btn btn-default fileinput-exists" data-dismiss="fileinput">Remove</a>
 					</div>
 				</div>

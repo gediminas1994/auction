@@ -10,6 +10,39 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('/vueTest', function () {
+    return view('vueTest');
+});
+
+Route::get('/vueJson', function () {
+
+    $arr = [
+        [
+            'id' => 1,
+            'name' => 'Test'
+        ],
+        [
+            'id' => 2,
+            'name' => 'Test 2'
+        ],
+        [
+            'id' => 3,
+            'name' => 'Test 3'
+        ]
+    ];
+
+    return response()->json($arr);
+});
+
+Route::post('/vueJson', function (\Illuminate\Http\Request $request) {
+
+    $arr = [
+            'id' => 999,
+            'name' => $request->input('name')
+        ];
+
+    return response()->json($arr);
+});
 
 Route::get('/', function () {
     return view('welcome');

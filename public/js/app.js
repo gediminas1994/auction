@@ -12106,10 +12106,73 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+    data: function data() {
+        return {
+            table: {},
+            item: '',
+            loading: false
+        };
+    },
     mounted: function mounted() {
         console.log('Component mounted.');
+        this.fetchData();
+    },
+
+    computed: {
+        isEmpty: function isEmpty() {
+            return this.table.length;
+        },
+        isLoading: function isLoading() {
+            return this.loading;
+        }
+    },
+    methods: {
+        fetchData: function fetchData() {
+            var _this = this;
+
+            axios.get('/vueJson').then(function (response) {
+                _this.table = response.data;
+            }).catch(function (error) {
+                console.log(error);
+            });
+        },
+        postData: function postData(data) {
+            return axios.post('/vueJson', data).then(function (response) {
+                console.log(response);
+                return response.data;
+            }).catch(function (error) {
+                console.log(error);
+            });
+        },
+        addNew: function addNew() {
+            var _this2 = this;
+
+            this.loading = true;
+            var params = {
+                'name': this.item
+            };
+            this.postData(params).then(function (data) {
+                _this2.item = '';
+                _this2.table.push(data);
+                _this2.loading = false;
+            });
+        }
     }
 });
 
@@ -35508,7 +35571,7 @@ var Component = __webpack_require__(38)(
   /* cssModules */
   null
 )
-Component.options.__file = "/Users/mantas/Work/ble/auction/resources/assets/js/components/Example.vue"
+Component.options.__file = "D:\\web\\auction\\resources\\assets\\js\\components\\Example.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] Example.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -35586,8 +35649,6 @@ module.exports = function normalizeComponent (
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _vm._m(0)
-},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticClass: "container"
   }, [_c('div', {
@@ -35600,8 +35661,36 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "panel-heading"
   }, [_vm._v("Example Component")]), _vm._v(" "), _c('div', {
     staticClass: "panel-body"
-  }, [_vm._v("\n                    I'm an example component!\n                ")])])])])])
-}]}
+  }, [_vm._v("\n                    I'm an example component!\n                ")]), _vm._v(" "), (_vm.isEmpty) ? _c('div', [_c('table', {
+    staticClass: "table"
+  }, _vm._l((_vm.table), function(item) {
+    return _c('tr', [_c('td', [_vm._v(_vm._s(item.id))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(item.name))])])
+  }))]) : _vm._e(), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.item),
+      expression: "item"
+    }],
+    attrs: {
+      "type": "text"
+    },
+    domProps: {
+      "value": (_vm.item)
+    },
+    on: {
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.item = $event.target.value
+      }
+    }
+  }), _vm._v(" "), _c('button', {
+    staticClass: "btn",
+    on: {
+      "click": _vm.addNew
+    }
+  }, [_vm._v("Add new")]), _vm._v(" "), (_vm.isLoading) ? _c('div', [_vm._v("\n                    Loading ...\n                ")]) : _vm._e()])])])])
+},staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
   module.hot.accept()
