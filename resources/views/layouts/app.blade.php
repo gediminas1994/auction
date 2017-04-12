@@ -81,12 +81,12 @@
                                     </a>
 
                                     @if(!Auth::user()->blocked)
-                                        <a href="{{ route('items.create') }}">
+                                        <a href="{{ route('user.items.create', Auth::user()) }}">
                                             Create Item
                                         </a>
                                     @endif
 
-                                    <a href="{{ route('user.listedItems', Auth::user()) }}">
+                                    <a href="{{ route('user.items', Auth::user()) }}">
                                         My items
                                     </a>
 

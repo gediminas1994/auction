@@ -18,12 +18,6 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index');
 
-Route::group(['prefix' => 'items'], function () {
-    Route::get('/create', ['as' => 'items.create', 'uses' => 'ItemsController@create']);
-    Route::get('/{item}', ['as' => 'items.show', 'uses' => 'ItemsController@show']);
-    Route::post('/store', ['as' => 'items.store', 'uses' => 'ItemsController@store']);
-});
-
 Route::group(['prefix' => 'admin', 'namespace' => 'admin', 'middleware' => 'auth'], function (){
     Route::group(['prefix' => 'users'], function () {
         Route::get('/', ['as' => 'admin.users.index', 'uses' => 'UsersController@index']);
@@ -48,7 +42,13 @@ Route::group(['prefix' => 'user', 'namespace' => 'user', 'middleware' => 'auth']
     Route::delete('/{user}/bankAccounts/{bankRecord}', ['as' => 'user.bankAccounts.destroy', 'uses' => 'BankAccountsController@destroy']);
 
     //user items
-    Route::get('/{user}/listedItems', ['as' => 'user.listedItems', 'uses' => 'ItemController@index']);
+    Route::get('/{user}/items', ['as' => 'user.items', 'uses' => 'ItemController@index']);
+    Route::get('/{user}/items/create', ['as' => 'user.items.create', 'uses' => 'ItemController@create']);
+    Route::post('/{user}/items', ['as' => 'user.items.store', 'uses' => 'ItemController@store']);
+    Route::get('/{user}/items/{item}', ['as' => 'user.items.show', 'uses' => 'ItemController@show']);
+    Route::get('/{user}/items/{item}/edit', ['as' => 'user.items.edit', 'uses' => 'ItemController@edit']);
+    Route::patch('/{user}/items/{item}', ['as' => 'user.items.update', 'uses' => 'ItemController@update']);
+    Route::delete('/{user}/items/{item}', ['as' => 'user.items.destroy', 'uses' => 'ItemController@destroy']);
 });
 
 
