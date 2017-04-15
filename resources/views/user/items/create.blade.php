@@ -79,6 +79,17 @@
 		</div>
 
 		<div class="form-group">
+			<label for="mailing_services" class="col-sm-2 control-label">Mailing Service</label>
+			<div class="col-sm-8">
+				<select class="form-control" id="mailing_services" name="mailing_services">
+					@foreach($mailing_services as $mailing_service)
+						<option value="{{ $mailing_service->id }}">{{$mailing_service->title}}</option>
+					@endforeach
+				</select>
+			</div>
+		</div>
+
+		<div class="form-group">
 			<label for="file" class="col-sm-2 control-label">Upload a picture</label>
 			<div class="col-sm-8">
 				<div class="fileinput fileinput-new" data-provides="fileinput">

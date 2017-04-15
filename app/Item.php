@@ -10,6 +10,11 @@ class Item extends Model
         return $this->belongsTo(User::class);
     }
 
+
+    public function categories(){
+        return $this->belongsToMany(Category::class, 'tags', 'category_id', 'item_id');
+    }
+
     protected $fillable = [
         'user_id',
         'title',

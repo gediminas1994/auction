@@ -24,13 +24,12 @@
                             <tr>
                                 <td>{{ $user->username }}</td>
                                 <td><a class="btn btn-primary" href='{{ route('admin.users.show', $user->id)  }}'>Show</a></td>
-                                <td><a class="btn btn-info" href="admin/users/{{ $user->id }}/edit">Edit</a></td>
-                                <td><a class="btn btn-danger" href="admin/users/{{ $user->id }}">Delete</a></td>
-                                <!-- jeigu 1, useris uzblokuotas -->
-                                @if($user->status == 1)
-                                    <td><a class="btn btn-success" href="">Unblock</a></td>
+                                <td><a class="btn btn-info" href="{{ route('admin.users.edit', $user->id)  }}">Edit</a></td>
+                                <td><a class="btn btn-danger" onclick="destroyUser({{json_encode(route('admin.users.destroy', $user->id))}})">Delete</a></td>
+                                @if($user->blocked)
+                                    <td><a class="btn btn-success" onclick="unblockUser({{json_encode(route('admin.users.unblock', $user->id))}})">Unblock</a></td>
                                 @else
-                                    <td><a class="btn btn-danger" href="">Block</a></td>
+                                    <td><a class="btn btn-danger" onclick="blockUser({{json_encode(route('admin.users.block', $user->id))}})">Block</a></td>
                                 @endif
 
                             </tr>
@@ -42,4 +41,42 @@
         </div>
     </div>
 
+
+    <script>
+        function destroyUser(url) {
+            $.ajax({
+                url: url,
+                method: 'DELETE',
+                data: {
+                    _token: {!! json_encode(csrf_token()) !!}
+                }
+            }).always(function () {
+                location.reload();
+            });
+        }
+
+        function blockUser(url) {
+            $.ajax({
+                url: url,
+                method: 'PATCH',
+                data: {
+                    _token: {!! json_encode(csrf_token()) !!}
+                }
+            }).always(function () {
+                location.reload();
+            });
+        }
+
+        function unblockUser(url) {
+            $.ajax({
+                url: url,
+                method: 'PATCH',
+                data: {
+                    _token: {!! json_encode(csrf_token()) !!}
+                }
+            }).always(function () {
+                location.reload();
+            });
+        }
+    </script>
 @endsection

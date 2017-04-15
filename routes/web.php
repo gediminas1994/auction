@@ -20,11 +20,16 @@ Route::get('/home', 'HomeController@index');
 
 Route::group(['prefix' => 'admin', 'namespace' => 'admin', 'middleware' => 'auth'], function (){
     Route::group(['prefix' => 'users'], function () {
+        //user CRUD as admin
         Route::get('/', ['as' => 'admin.users.index', 'uses' => 'UsersController@index']);
         Route::get('/{user}', ['as' => 'admin.users.show', 'uses' => 'UsersController@show']);
-        Route::get('/{user}/edit', ['as' => 'admin.users.edit', 'uses' => 'UsersController@show']);
+        Route::get('/{user}/edit', ['as' => 'admin.users.edit', 'uses' => 'UsersController@edit']);
         Route::patch('/{user}', ['as' => 'admin.users.update', 'uses' => 'UsersController@update']);
-        Route::delete('/{user}', ['as' => 'admin.users.delete', 'uses' => 'UsersController@delete']);
+        Route::delete('/{user}', ['as' => 'admin.users.destroy', 'uses' => 'UsersController@destroy']);
+
+        //block and unblock users as admin
+        Route::patch('/{user}', ['as' => 'admin.users.block', 'uses' => 'UsersController@block']);
+        Route::patch('/{user}', ['as' => 'admin.users.unblock', 'uses' => 'UsersController@unblock']);
     });
 });
 
