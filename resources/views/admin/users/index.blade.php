@@ -5,7 +5,7 @@
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
 
-                <a class="btn btn-info" href="{{url()->previous()}}">Back</a>
+                <a class="btn btn-info" href="{{ url('/home') }}">Back</a>
 
                 <div class="panel panel-default">
 
@@ -27,11 +27,10 @@
                                 <td><a class="btn btn-info" href="{{ route('admin.users.edit', $user->id)  }}">Edit</a></td>
                                 <td><a class="btn btn-danger" onclick="destroyUser({{json_encode(route('admin.users.destroy', $user->id))}})">Delete</a></td>
                                 @if($user->blocked)
-                                    <td><a class="btn btn-success" onclick="unblockUser({{json_encode(route('admin.users.unblock', $user->id))}})">Unblock</a></td>
+                                    <td><a class="btn btn-success" onclick="block_unblockUser({{json_encode(route('admin.users.block_unblock', $user))}})">Unblock</a></td>
                                 @else
-                                    <td><a class="btn btn-danger" onclick="blockUser({{json_encode(route('admin.users.block', $user->id))}})">Block</a></td>
+                                    <td><a class="btn btn-danger" onclick="block_unblockUser({{json_encode(route('admin.users.block_unblock', $user))}})">Block</a></td>
                                 @endif
-
                             </tr>
                         @endforeach
                         </tbody>
@@ -55,10 +54,10 @@
             });
         }
 
-        function blockUser(url) {
+        function block_unblockUser(url) {
             $.ajax({
                 url: url,
-                method: 'PATCH',
+                method: 'POST',
                 data: {
                     _token: {!! json_encode(csrf_token()) !!}
                 }
@@ -67,16 +66,5 @@
             });
         }
 
-        function unblockUser(url) {
-            $.ajax({
-                url: url,
-                method: 'PATCH',
-                data: {
-                    _token: {!! json_encode(csrf_token()) !!}
-                }
-            }).always(function () {
-                location.reload();
-            });
-        }
     </script>
 @endsection

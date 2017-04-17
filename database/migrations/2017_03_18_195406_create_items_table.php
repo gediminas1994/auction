@@ -23,6 +23,8 @@ class CreateItemsTable extends Migration
             $table->integer('quantity');
             $table->float('startingBid');
             $table->string('picture');
+            $table->integer('mailingService_id');
+            $table->tinyInteger('blocked')->default(0);
             $table->timestamps();
         });
     }

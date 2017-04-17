@@ -23,10 +23,11 @@ class Item extends Model
         'expirationDate',
         'quantity',
         'startingBid',
+        'mailingService_id',
         'picture'
     ];
 
-    public function createItem($user_id, $title, $type, $description, $expirationDate, $quantity, $startingBid, $picturePath){
+    public function createItem($user_id, $title, $type, $description, $expirationDate, $quantity, $startingBid, $mailingServiceId, $picturePath){
         $item = Item::fill([
             'user_id' => $user_id,
             'title' => $title,
@@ -35,6 +36,7 @@ class Item extends Model
             'expirationDate' => $expirationDate,
             'quantity' => $quantity,
             'startingBid' => $startingBid,
+            'mailingService_id' => $mailingServiceId,
             'picture' => $picturePath
         ]);
         $item->save();

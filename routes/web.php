@@ -10,13 +10,12 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', ['as' => 'welcome', 'uses' => 'WelcomeController@index']);
 
 Auth::routes();
 
 Route::get('/home', 'HomeController@index');
+
 
 Route::group(['prefix' => 'admin', 'namespace' => 'admin', 'middleware' => 'auth'], function (){
     Route::group(['prefix' => 'users'], function () {
@@ -26,10 +25,8 @@ Route::group(['prefix' => 'admin', 'namespace' => 'admin', 'middleware' => 'auth
         Route::get('/{user}/edit', ['as' => 'admin.users.edit', 'uses' => 'UsersController@edit']);
         Route::patch('/{user}', ['as' => 'admin.users.update', 'uses' => 'UsersController@update']);
         Route::delete('/{user}', ['as' => 'admin.users.destroy', 'uses' => 'UsersController@destroy']);
-
         //block and unblock users as admin
-        Route::patch('/{user}', ['as' => 'admin.users.block', 'uses' => 'UsersController@block']);
-        Route::patch('/{user}', ['as' => 'admin.users.unblock', 'uses' => 'UsersController@unblock']);
+        Route::post('/{user}', ['as' => 'admin.users.block_unblock', 'uses' => 'UsersController@block_unblock']);
     });
 });
 
@@ -45,25 +42,24 @@ Route::group(['prefix' => 'user', 'namespace' => 'user', 'middleware' => 'auth']
     Route::get('/{user}/bankAccounts/{bankRecord}/edit', ['as' => 'user.bankAccounts.edit', 'uses' => 'BankAccountsController@edit']);
     Route::patch('/{user}/bankAccounts/{bankRecord}', ['as' => 'user.bankAccounts.update', 'uses' => 'BankAccountsController@update']);
     Route::delete('/{user}/bankAccounts/{bankRecord}', ['as' => 'user.bankAccounts.destroy', 'uses' => 'BankAccountsController@destroy']);
-
-    //user items
-    Route::get('/{user}/items', ['as' => 'user.items', 'uses' => 'ItemController@index']);
-    Route::get('/{user}/items/create', ['as' => 'user.items.create', 'uses' => 'ItemController@create']);
-    Route::post('/{user}/items', ['as' => 'user.items.store', 'uses' => 'ItemController@store']);
-    Route::get('/{user}/items/{item}', ['as' => 'user.items.show', 'uses' => 'ItemController@show']);
-    Route::get('/{user}/items/{item}/edit', ['as' => 'user.items.edit', 'uses' => 'ItemController@edit']);
-    Route::patch('/{user}/items/{item}', ['as' => 'user.items.update', 'uses' => 'ItemController@update']);
-    Route::delete('/{user}/items/{item}', ['as' => 'user.items.destroy', 'uses' => 'ItemController@destroy']);
 });
 
+Route::group(['prefix' => 'items'], function () {
+    Route::get('/items', ['as' => 'items.index', 'uses' => 'ItemController@index']);
+    Route::get('/favorites', ['as' => 'items.favorites', 'uses' => 'ItemController@favorites']);
+    Route::get('/create', ['as' => 'items.create', 'uses' => 'ItemController@create']);
+    Route::post('/items', ['as' => 'items.store', 'uses' => 'ItemController@store']);
+    Route::get('/{item}', ['as' => 'items.show', 'uses' => 'ItemController@show']);
+    Route::get('/{item}/edit', ['as' => 'items.edit', 'uses' => 'ItemController@edit']);
+    Route::patch('/{item}', ['as' => 'items.update', 'uses' => 'ItemController@update']);
+    Route::delete('/{item}', ['as' => 'items.destroy', 'uses' => 'ItemController@destroy']);
 
+    //users listed items
+    Route::get('/user/{user}', ['as' => 'user.listedItems', 'uses' => 'ItemController@listedItems']);
 
-
-
-
-
-
-
+    //list and add favorite items
+    Route::post('/favorites/{item}', ['as' => 'items.addToFavorites', 'uses' => 'ItemController@addToFavorites']);
+});
 
 
 

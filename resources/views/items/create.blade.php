@@ -4,7 +4,7 @@
 
 
 <div class="container">
-	<form enctype="multipart/form-data" action="{{route('user.items.store', Auth::user())}}" id="createItem" class="form-horizontal" method="POST" >
+	<form enctype="multipart/form-data" action="{{ route('items.store') }}" id="createItem" class="form-horizontal" method="POST" >
 		{{csrf_field()}}
 
 		<div class="form-group">

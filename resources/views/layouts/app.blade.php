@@ -13,6 +13,9 @@
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
+    {{--FONT AWESOME--}}
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+
     {{--BOOTSTRAP DATETIMEPICKER--}}
     <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="/bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
@@ -33,9 +36,13 @@
 
 </head>
 <body>
+
+    {{--@include('partials.sidemenu')--}}
+
     <div id="app">
-        <nav class="navbar navbar-inverse navbar-static-top">
+        <nav class="navbar navbar-default navbar-static-top">
             <div class="container">
+
                 <div class="navbar-header">
 
                     <!-- Collapsed Hamburger -->
@@ -60,48 +67,52 @@
 
                     <!-- Right Side Of Navbar -->
                     <ul class="nav navbar-nav navbar-right">
+
                         <!-- Authentication Links -->
                         @if (Auth::guest())
                             <li><a href="{{ route('login') }}">Login</a></li>
                             <li><a href="{{ route('register') }}">Register</a></li>
                         @elseif(Auth::user()->user_type == 1)
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                                {{ Auth::user()->username }} <span class="caret"></span>
-                            </a>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                                    {{ Auth::user()->username }} <span class="caret"></span>
+                                </a>
 
-                            <ul class="dropdown-menu" role="menu">
-                                <li>
-                                    <a href="{{ route('user.show', Auth::user()) }}">
-                                        Profile
-                                    </a>
-
-                                    <a href="{{ route('user.bankAccounts', Auth::user()) }}">
-                                        Bank Accounts
-                                    </a>
-
-                                    @if(!Auth::user()->blocked)
-                                        <a href="{{ route('user.items.create', Auth::user()) }}">
-                                            Create Item
+                                <ul class="dropdown-menu" role="menu">
+                                    <li>
+                                        <a href="{{ route('user.show', Auth::user()) }}">
+                                            <i class="fa fa-user" aria-hidden="true"></i> Profile
                                         </a>
-                                    @endif
 
-                                    <a href="{{ route('user.items', Auth::user()) }}">
-                                        My items
-                                    </a>
+                                        <a href="{{ route('user.bankAccounts', Auth::user()) }}">
+                                            <i class="fa fa-usd" aria-hidden="true"></i> Bank Accounts
+                                        </a>
 
-                                    <a href="{{ route('logout') }}"
-                                       onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                        Logout
-                                    </a>
+                                        @if(!Auth::user()->blocked)
+                                            <a href="{{ route('items.create') }}">
+                                                <i class="fa fa-plus" aria-hidden="true"></i> Create Item
+                                            </a>
+                                        @endif
 
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                        {{ csrf_field() }}
-                                    </form>
-                                </li>
-                            </ul>
-                        </li>
+                                        <a href="{{ route('user.listedItems', Auth::user()) }}">
+                                            <i class="fa fa-diamond" aria-hidden="true"></i> My items
+                                        </a>
+
+                                        <a href="{{ route('items.favorites') }}">
+                                            <i class="fa fa-star" aria-hidden="true"></i> Favorites
+                                        </a>
+
+                                        <a href="{{ route('logout') }}"
+                                           onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                            <i class="fa fa-power-off" aria-hidden="true"></i> Logout
+                                        </a>
+
+                                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                            {{ csrf_field() }}
+                                        </form>
+                                    </li>
+                                </ul>
+                            </li>
                         @else
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">

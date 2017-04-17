@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\user;
+namespace App\Http\Controllers;
 
 use App\Category;
+use App\Favorite;
 use App\Item;
 use App\Mailing_Service;
 use App\Tag;
@@ -12,13 +13,14 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rules\In;
 
 class ItemController extends Controller
 {
     public function index()
     {
-        $items = Item::where('user_id', Auth::user()->id)->get();
-        return view('user.items.index')->with('items', $items);
+        $items = Item::all();
+        return view('items.index')->with('items', $items);
     }
 
 
@@ -27,7 +29,7 @@ class ItemController extends Controller
         $categories = Category::where('parent', 0)->get();
         $subcategories = Category::where('parent', '!=', 0)->get();
         $mailing_services = Mailing_Service::all();
-        return view('user.items.create')
+        return view('items.create')
             ->with('categories', $categories)
             ->with('subcategories', $subcategories)
             ->with('mailing_services', $mailing_services);
@@ -43,7 +45,8 @@ class ItemController extends Controller
             'expirationDate' => 'required_if:type,0',
             'quantity' => 'required_if:type,1',
             'startingBid' => 'required_if:type,0',
-            'picture' => 'required'
+            'mailing_services' => 'required',
+            'picture' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -59,6 +62,7 @@ class ItemController extends Controller
         $expirationDate = Input::get('expirationDate');
         $quantity = Input::get('quantity');
         $startingBid = Input::get('startingBid');
+        $mailingServiceId = Input::get('mailing_services');
         if(Input::hasFile('picture')){
             $picture = Input::file('picture');
             $picture->move('items/', $picture->getClientOriginalName());
@@ -66,7 +70,7 @@ class ItemController extends Controller
         }
 
         $item = new Item();
-        $item->createItem($user_id, $title, $type, $description, $expirationDate, $quantity, $startingBid, $picturePath);
+        $item->createItem($user_id, $title, $type, $description, $expirationDate, $quantity, $startingBid, $mailingServiceId, $picturePath);
 
         $submittedTags = Input::get('tags');
         $lastItemStoredByUser = Item::where('user_id', Auth::user()->id)->orderBy('created_at', 'desc')->first();
@@ -83,21 +87,21 @@ class ItemController extends Controller
 
         Session::flash('message','Item was created succesfully!');
 
-        return redirect()->route('user.items', Auth::user());
+        return redirect()->route('user.listedItems', Auth::user());
     }
 
 
-    public function show($user_id, $item_id)
+    public function show($item)
     {
-        $item = Item::where('id', $item_id)->first();
-        return view('user.items.show')->with('item', $item);
+        $item = Item::where('id', $item)->first();
+        return view('items.show')->with('item', $item);
     }
 
 
-    public function edit($user_id, $item_id)
+    public function edit($item_id)
     {
-        $item = Item::where('id', $item_id)->where('user_id', $user_id)->first();
-        return view('user.items.edit')
+        $item = Item::where('id', $item_id)->where('user_id', Auth::user())->first();
+        return view('items.edit')
             ->with('item', $item);
     }
 
@@ -108,12 +112,40 @@ class ItemController extends Controller
     }
 
 
-    public function destroy($user, $item)
+    public function destroy($id)
     {
-        $item = Item::where('id', $item)->where('user_id', $user)->first();
+        $item = Item::find($id);
         $item->delete();
 
-        $items = Item::where('user_id', $user)->get();
-        return view('user.items')->with('bankAccounts', $items);
+        Session::flash('message','Item was deleted');
+
+        return redirect()->route('user.listedItems', Auth::user());
+    }
+
+
+
+    public function listedItems(){
+        $user_id = Auth::user()->id;
+        $items = Item::where('user_id', $user_id)->get();
+        return view('user.items.listedItems')->with('items', $items);
+    }
+
+    public function addToFavorites($id){
+        if(Favorite::where('user_id', Auth::user()->id)->where('item_id', $id)->first()){
+            //do nothing couse the item is already marked
+        }else{
+            $favorites = new Favorite();
+            $favorites->user_id = Auth::user()->id;
+            $favorites->item_id = $id;
+            $favorites->save();
+        }
+    }
+
+    public function favorites(){
+        $user_id = Auth::user()->id;
+
+        $favorite_ids = Favorite::where('user_id', $user_id)->get();
+
+        return view('user.items.favorites')->with('favorites', $favorite_ids);
     }
 }

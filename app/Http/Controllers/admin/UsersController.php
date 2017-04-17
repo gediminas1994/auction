@@ -31,21 +31,17 @@ class UsersController extends Controller
         return view('admin.users.index')->with('users', $users);
     }
 
-    public function block($id){
+    public function block_unblock($id){
         $user = User::findOrFail($id);
-        $user->blocked = 1;
+        if($user->blocked){
+            $user->blocked = 0;
+        }else{
+            $user->blocked = 1;
+        }
         $user->save();
 
-        $users = User::where('user_type', 1)->get();
-        return view('admin.users.index')->with('users', $users);
-    }
+        $success = true;
 
-    public function unblock($id){
-        $user = User::findOrFail($id);
-        $user->blocked = 0;
-        $user->save();
-
-        $users = User::where('user_type', 1)->get();
-        return view('admin.users.index')->with('users', $users);
+        return response($success);
     }
 }
