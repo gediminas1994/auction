@@ -19,7 +19,7 @@
 			<div class="col-sm-8">
 				<select class="form-control" id="type" name="type">
 					<option value="0" {{ (old('type') == 0 ? 'selected' : '') }}>Auction</option>
-					<option value="1" {{ (old('type') == 1 ? 'selected' : '') }}>Regular Item</option>
+					<option value="1" {{ (old('type') == 1 ? 'selected' : '') }}>Regular Product</option>
 				</select>
 			</div>
 		</div>

@@ -90,7 +90,7 @@
 
                                         @if(!Auth::user()->blocked)
                                             <a href="{{ route('items.create') }}">
-                                                <i class="fa fa-plus" aria-hidden="true"></i> Create Item
+                                                <i class="fa fa-plus" aria-hidden="true"></i> Create Product
                                             </a>
                                         @endif
 

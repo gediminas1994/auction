@@ -4,17 +4,8 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Item extends Model
+class Product extends Model
 {
-    public function user(){
-        return $this->belongsTo(User::class);
-    }
-
-
-    public function categories(){
-        return $this->belongsToMany(Category::class, 'tags', 'category_id', 'item_id');
-    }
-
     protected $fillable = [
         'user_id',
         'title',
@@ -27,8 +18,19 @@ class Item extends Model
         'picture'
     ];
 
+
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
+
+
+    public function categories(){
+        return $this->belongsToMany(Category::class);
+    }
+
+
     public function createItem($user_id, $title, $type, $description, $expirationDate, $quantity, $startingBid, $mailingServiceId, $picturePath){
-        $item = Item::fill([
+        $item = Product::fill([
             'user_id' => $user_id,
             'title' => $title,
             'type' => $type,

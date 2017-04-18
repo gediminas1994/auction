@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Category;
 use App\Favorite;
-use App\Item;
+use App\Product;
 use App\Mailing_Service;
 use App\Tag;
 use Illuminate\Http\Request;
@@ -19,7 +19,7 @@ class ItemController extends Controller
 {
     public function index()
     {
-        $items = Item::all();
+        $items = Product::all();
         return view('items.index')->with('items', $items);
     }
 
@@ -69,11 +69,11 @@ class ItemController extends Controller
             $picturePath = '/items/' . $picture->getClientOriginalName();
         }
 
-        $item = new Item();
+        $item = new Product();
         $item->createItem($user_id, $title, $type, $description, $expirationDate, $quantity, $startingBid, $mailingServiceId, $picturePath);
 
         $submittedTags = Input::get('tags');
-        $lastItemStoredByUser = Item::where('user_id', Auth::user()->id)->orderBy('created_at', 'desc')->first();
+        $lastItemStoredByUser = Product::where('user_id', Auth::user()->id)->orderBy('created_at', 'desc')->first();
 
         foreach ($submittedTags as $submittedTag){
             $category_id = $submittedTag;
@@ -85,7 +85,7 @@ class ItemController extends Controller
             $tags->save();
         }
 
-        Session::flash('message','Item was created succesfully!');
+        Session::flash('message','Product was created succesfully!');
 
         return redirect()->route('user.listedItems', Auth::user());
     }
@@ -93,14 +93,14 @@ class ItemController extends Controller
 
     public function show($item)
     {
-        $item = Item::where('id', $item)->first();
+        $item = Product::where('id', $item)->first();
         return view('items.show')->with('item', $item);
     }
 
 
     public function edit($item_id)
     {
-        $item = Item::where('id', $item_id)->where('user_id', Auth::user())->first();
+        $item = Product::where('id', $item_id)->where('user_id', Auth::user())->first();
         return view('items.edit')
             ->with('item', $item);
     }
@@ -114,10 +114,10 @@ class ItemController extends Controller
 
     public function destroy($id)
     {
-        $item = Item::find($id);
+        $item = Product::find($id);
         $item->delete();
 
-        Session::flash('message','Item was deleted');
+        Session::flash('message','Product was deleted');
 
         return redirect()->route('user.listedItems', Auth::user());
     }
@@ -126,7 +126,7 @@ class ItemController extends Controller
 
     public function listedItems(){
         $user_id = Auth::user()->id;
-        $items = Item::where('user_id', $user_id)->get();
+        $items = Product::where('user_id', $user_id)->get();
         return view('user.items.listedItems')->with('items', $items);
     }
 

@@ -3,7 +3,7 @@
 use Illuminate\Database\Seeder;
 use Carbon\Carbon;
 
-class ItemsTableSeeder extends Seeder
+class productsTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,7 +14,7 @@ class ItemsTableSeeder extends Seeder
     {
         $date = Carbon::create(2017, 4, 16, 0, 0, 0);
 
-        DB::table('items')->insert([
+        DB::table('products')->insert([
             'user_id' => 3,
             'title' => str_random(),
             'type' => rand(0,1),
@@ -23,12 +23,12 @@ class ItemsTableSeeder extends Seeder
             'quantity' => rand(1,25),
             'startingBid' => rand(101, 9999) / 100,
             'mailingService_id' => rand(1,5),
-            'picture' => '/items/Beauty And The Beast 2017.jpg',
+            'picture' => '/products/Beauty And The Beast 2017.jpg',
             'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
             'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
         ]);
 
-        DB::table('items')->insert([
+        DB::table('products')->insert([
             'user_id' => 3,
             'title' => str_random(),
             'type' => rand(0,1),
@@ -37,12 +37,12 @@ class ItemsTableSeeder extends Seeder
             'quantity' => rand(1,25),
             'startingBid' => rand(101, 9999) / 100,
             'mailingService_id' => rand(1,5),
-            'picture' => '/items/Doctor Strange 2016.jpg',
+            'picture' => '/products/Doctor Strange 2016.jpg',
             'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
             'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
         ]);
 
-        DB::table('items')->insert([
+        DB::table('products')->insert([
             'user_id' => 3,
             'title' => str_random(),
             'type' => rand(0,1),
@@ -51,12 +51,12 @@ class ItemsTableSeeder extends Seeder
             'quantity' => rand(1,25),
             'startingBid' => rand(101, 9999) / 100,
             'mailingService_id' => rand(1,5),
-            'picture' => '/items/Grant Budapest Hotel 2014.jpg',
+            'picture' => '/products/Grant Budapest Hotel 2014.jpg',
             'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
             'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
         ]);
 
-        DB::table('items')->insert([
+        DB::table('products')->insert([
             'user_id' => 3,
             'title' => str_random(),
             'type' => rand(0,1),
@@ -65,12 +65,12 @@ class ItemsTableSeeder extends Seeder
             'quantity' => rand(1,25),
             'startingBid' => rand(101, 9999) / 100,
             'mailingService_id' => rand(1,5),
-            'picture' => '/items/Hot Rod 2017.jpg',
+            'picture' => '/products/Hot Rod 2017.jpg',
             'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
             'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
         ]);
 
-        DB::table('items')->insert([
+        DB::table('products')->insert([
             'user_id' => rand(2,11),
             'title' => str_random(),
             'type' => rand(0,1),
@@ -79,12 +79,12 @@ class ItemsTableSeeder extends Seeder
             'quantity' => rand(1,25),
             'startingBid' => rand(101, 9999) / 100,
             'mailingService_id' => rand(1,5),
-            'picture' => '/items/Kong Skull Island 2017.jpg',
+            'picture' => '/products/Kong Skull Island 2017.jpg',
             'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
             'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
         ]);
 
-        DB::table('items')->insert([
+        DB::table('products')->insert([
             'user_id' => rand(2,11),
             'title' => str_random(),
             'type' => rand(0,1),
@@ -93,12 +93,12 @@ class ItemsTableSeeder extends Seeder
             'quantity' => rand(1,25),
             'startingBid' => rand(101, 9999) / 100,
             'mailingService_id' => rand(1,5),
-            'picture' => '/items/La La Land 2016.jpeg',
+            'picture' => '/products/La La Land 2016.jpeg',
             'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
             'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
         ]);
 
-        DB::table('items')->insert([
+        DB::table('products')->insert([
             'user_id' => rand(2,11),
             'title' => str_random(),
             'type' => rand(0,1),
@@ -107,12 +107,12 @@ class ItemsTableSeeder extends Seeder
             'quantity' => rand(1,25),
             'startingBid' => rand(101, 9999) / 100,
             'mailingService_id' => rand(1,5),
-            'picture' => '/items/Liar Liar 1997.jpg',
+            'picture' => '/products/Liar Liar 1997.jpg',
             'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
             'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
         ]);
 
-        DB::table('items')->insert([
+        DB::table('products')->insert([
             'user_id' => rand(2,11),
             'title' => str_random(),
             'type' => rand(0,1),
@@ -121,12 +121,12 @@ class ItemsTableSeeder extends Seeder
             'quantity' => rand(1,25),
             'startingBid' => rand(101, 9999) / 100,
             'mailingService_id' => rand(1,5),
-            'picture' => '/items/Lion 2016.jpg',
+            'picture' => '/products/Lion 2016.jpg',
             'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
             'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
         ]);
 
-        DB::table('items')->insert([
+        DB::table('products')->insert([
             'user_id' => rand(2,11),
             'title' => str_random(),
             'type' => rand(0,1),
@@ -135,12 +135,12 @@ class ItemsTableSeeder extends Seeder
             'quantity' => rand(1,25),
             'startingBid' => rand(101, 9999) / 100,
             'mailingService_id' => rand(1,5),
-            'picture' => '/items/Logan 2017.jpg',
+            'picture' => '/products/Logan 2017.jpg',
             'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
             'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
         ]);
 
-        DB::table('items')->insert([
+        DB::table('products')->insert([
             'user_id' => rand(2,11),
             'title' => str_random(),
             'type' => rand(0,1),
@@ -149,12 +149,12 @@ class ItemsTableSeeder extends Seeder
             'quantity' => rand(1,25),
             'startingBid' => rand(101, 9999) / 100,
             'mailingService_id' => rand(1,5),
-            'picture' => '/items/Mirror Mirror 2012.jpg',
+            'picture' => '/products/Mirror Mirror 2012.jpg',
             'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
             'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
         ]);
 
-        DB::table('items')->insert([
+        DB::table('products')->insert([
             'user_id' => rand(2,11),
             'title' => str_random(),
             'type' => rand(0,1),
@@ -163,12 +163,12 @@ class ItemsTableSeeder extends Seeder
             'quantity' => rand(1,25),
             'startingBid' => rand(101, 9999) / 100,
             'mailingService_id' => rand(1,5),
-            'picture' => '/items/Moana 2016.jpg',
+            'picture' => '/products/Moana 2016.jpg',
             'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
             'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
         ]);
 
-        DB::table('items')->insert([
+        DB::table('products')->insert([
             'user_id' => rand(2,11),
             'title' => str_random(),
             'type' => rand(0,1),
@@ -177,12 +177,12 @@ class ItemsTableSeeder extends Seeder
             'quantity' => rand(1,25),
             'startingBid' => rand(101, 9999) / 100,
             'mailingService_id' => rand(1,5),
-            'picture' => '/items/Reservoir Dogs 1992.jpg',
+            'picture' => '/products/Reservoir Dogs 1992.jpg',
             'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
             'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
         ]);
 
-        DB::table('items')->insert([
+        DB::table('products')->insert([
             'user_id' => rand(2,11),
             'title' => str_random(),
             'type' => rand(0,1),
@@ -191,12 +191,12 @@ class ItemsTableSeeder extends Seeder
             'quantity' => rand(1,25),
             'startingBid' => rand(101, 9999) / 100,
             'mailingService_id' => rand(1,5),
-            'picture' => '/items/Split 2017.jpg',
+            'picture' => '/products/Split 2017.jpg',
             'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
             'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
         ]);
 
-        DB::table('items')->insert([
+        DB::table('products')->insert([
             'user_id' => rand(2,11),
             'title' => str_random(),
             'type' => rand(0,1),
@@ -205,9 +205,19 @@ class ItemsTableSeeder extends Seeder
             'quantity' => rand(1,25),
             'startingBid' => rand(101, 9999) / 100,
             'mailingService_id' => rand(1,5),
-            'picture' => '/items/The Guest 2014.jpg',
+            'picture' => '/products/The Guest 2014.jpg',
             'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
             'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
         ]);
+
+
+        $products = \App\Product::all();
+
+        foreach ($products as $product) {
+            $category = \App\Category::inRandomOrder()->first();
+
+            $category->products()->attach($product);
+
+        }
     }
 }
