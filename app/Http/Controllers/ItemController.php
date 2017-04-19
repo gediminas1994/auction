@@ -26,8 +26,8 @@ class ItemController extends Controller
 
     public function create()
     {
-        $categories = Category::where('parent', 0)->get();
-        $subcategories = Category::where('parent', '!=', 0)->get();
+        $categories = Category::where('parent_id', null)->get();
+        $subcategories = Category::where('parent_id', '!=', null)->get();
         $mailing_services = Mailing_Service::all();
         return view('items.create')
             ->with('categories', $categories)
@@ -41,12 +41,12 @@ class ItemController extends Controller
         $validator = Validator::make($request->all(), [
             'title' => 'required',
             'description' => 'required',
-            'mailing_services' => 'required',
-            'expirationDate' => 'required_if:type,0',
-            'quantity' => 'required_if:type,1',
-            'startingBid' => 'required_if:type,0',
+            'categories' => 'required',
             'mailing_services' => 'required',
             'picture' => 'required',
+            'expirationDate' => 'required_if:type,0',
+            'startingBid' => 'required_if:type,0',
+            'quantity' => 'required_if:type,1'
         ]);
 
         if ($validator->fails()) {
@@ -69,21 +69,10 @@ class ItemController extends Controller
             $picturePath = '/items/' . $picture->getClientOriginalName();
         }
 
+        $submittedCategories = Input::get('categories');
+
         $item = new Product();
-        $item->createItem($user_id, $title, $type, $description, $expirationDate, $quantity, $startingBid, $mailingServiceId, $picturePath);
-
-        $submittedTags = Input::get('tags');
-        $lastItemStoredByUser = Product::where('user_id', Auth::user()->id)->orderBy('created_at', 'desc')->first();
-
-        foreach ($submittedTags as $submittedTag){
-            $category_id = $submittedTag;
-            $item_id = $lastItemStoredByUser->id;
-
-            $tags = new Tag();
-            $tags->category_id = $category_id;
-            $tags->item_id = $item_id;
-            $tags->save();
-        }
+        $item->createItem($user_id, $title, $type, $description, $expirationDate, $quantity, $startingBid, $mailingServiceId, $picturePath, $submittedCategories);
 
         Session::flash('message','Product was created succesfully!');
 
@@ -91,16 +80,16 @@ class ItemController extends Controller
     }
 
 
-    public function show($item)
+    public function show($id)
     {
-        $item = Product::where('id', $item)->first();
+        $item = Product::where('id', $id)->first();
         return view('items.show')->with('item', $item);
     }
 
 
-    public function edit($item_id)
+    public function edit($id)
     {
-        $item = Product::where('id', $item_id)->where('user_id', Auth::user())->first();
+        $item = Product::find($id);
         return view('items.edit')
             ->with('item', $item);
     }
@@ -118,10 +107,7 @@ class ItemController extends Controller
         $item->delete();
 
         Session::flash('message','Product was deleted');
-
-        return redirect()->route('user.listedItems', Auth::user());
     }
-
 
 
     public function listedItems(){
@@ -130,22 +116,18 @@ class ItemController extends Controller
         return view('user.items.listedItems')->with('items', $items);
     }
 
+
     public function addToFavorites($id){
-        if(Favorite::where('user_id', Auth::user()->id)->where('item_id', $id)->first()){
-            //do nothing couse the item is already marked
-        }else{
-            $favorites = new Favorite();
-            $favorites->user_id = Auth::user()->id;
-            $favorites->item_id = $id;
-            $favorites->save();
-        }
+        $user = Auth::user();
+        $product_id = $id;
+        $user->favorites()->attach($product_id);
+        return response();
     }
 
-    public function favorites(){
-        $user_id = Auth::user()->id;
 
-        $favorite_ids = Favorite::where('user_id', $user_id)->get();
+    public function showFavorites(){
+        $favorites = Auth::user()->favorites;
 
-        return view('user.items.favorites')->with('favorites', $favorite_ids);
+        return view('user.items.favorites')->with('favorites', $favorites);
     }
 }

@@ -18,6 +18,11 @@
                             <a href="{{ route('items.show', $item) }}" class="btn btn-success">Show</a>
                             <a href="{{ route('items.edit', $item) }}" class="btn btn-primary">Edit</a>
                             <a class="btn btn-danger" onclick="destroyItem({{ json_encode(route('items.destroy', $item)) }})">Delete</a>
+                            <div>
+                                @foreach($item->categories as $category)
+                                    <div>ASSIGNED CATEGORY: {{ $category->id }} {{ $category->title }}</div>
+                                @endforeach
+                            </div>
                         </div>
                     </div>
                 </div>

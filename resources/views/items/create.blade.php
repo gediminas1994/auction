@@ -31,17 +31,16 @@
 			</div>
 		</div>
 
-
 		<div class="form-group">
-			<label for="tags" class="col-sm-2 control-label">Tags</label>
+			<label for="categories" class="col-sm-2 control-label">Categories</label>
 			<div class="col-sm-8">
-				<select multiple id="tags" name="tags[]" data-placeholder="Select tags ( Maximum is 3 )">
+				<select multiple id="categories" name="categories[]" data-placeholder="Select categories">
 					@foreach($categories as $category)
                         <option selected></option>
-						<optgroup label="{{$category->title}}">
+						<optgroup label="{{ $category->title }}">
 							@foreach($subcategories as $subcategory)
-								@if($subcategory->parent == $category->id)
-									<option value="{{ $subcategory->id }}">{{ $subcategory->title }}</option>
+								@if($subcategory->parent_id == $category->id)
+									<option value="{{ $subcategory->id }}">{{ $subcategory->id }} {{ $subcategory->title }}</option>
 								@endif
 							@endforeach
 						</optgroup>
@@ -51,7 +50,7 @@
 		</div>
 
 
-        <div class="form-group">
+        <div class="form-group auction">
             <label for="datetimepicker1" class="col-sm-2 control-label">Expiration date</label>
             <div class="col-sm-8">
                 <div class='input-group date' id='datetimepicker1'>
@@ -64,14 +63,14 @@
         </div>
 
 
-		<div class="form-group">
+		<div class="form-group regular-item">
 			<label for="quantity" class="col-sm-2 control-label">Quantity</label>
 			<div class="col-sm-8">
 				<input type="number" class="form-control" id="quantity" name="quantity">
 			</div>
 		</div>
 
-		<div class="form-group">
+		<div class="form-group auction">
 			<label for="startingBid" class="col-sm-2 control-label">Starting Bid</label>
 			<div class="col-sm-8">
 				<input type="number" step="0.01" class="form-control" id="startingBid" name="startingBid">
@@ -94,7 +93,7 @@
 			<div class="col-sm-8">
 				<div class="fileinput fileinput-new" data-provides="fileinput">
 					<div class="fileinput-new thumbnail" style="width: 200px; height: 150px;">
-						<img src="/items/default-thumbnail.jpg" alt="Image">
+						<img src="/products/default-thumbnail.jpg" alt="Image">
 					</div>
 					<div class="fileinput-preview fileinput-exists thumbnail"
 						 style="max-width: 200px; max-height: 150px;"></div>
@@ -116,5 +115,23 @@
 	@include('partials.errors')
 	@include('partials.messages')
 </div>
+
+<script>
+    //.auction ir  .regular-item
+    window.onload = function() {
+        $('.regular-item').hide();
+        $('#type').change(function() {
+            var value = this.value;
+            console.log(value);
+            if(value == 0){
+				$('.regular-item').hide();
+				$('.auction').show();
+			}else{
+                $('.regular-item').show();
+                $('.auction').hide();
+			}
+        }).change();
+    }
+</script>
 
 @endsection

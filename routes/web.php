@@ -46,7 +46,7 @@ Route::group(['prefix' => 'user', 'namespace' => 'user', 'middleware' => 'auth']
 
 Route::group(['prefix' => 'items'], function () {
     Route::get('/items', ['as' => 'items.index', 'uses' => 'ItemController@index']);
-    Route::get('/favorites', ['as' => 'items.favorites', 'uses' => 'ItemController@favorites']);
+    Route::get('/favorites', ['as' => 'items.showFavorites', 'uses' => 'ItemController@showFavorites']);
     Route::get('/create', ['as' => 'items.create', 'uses' => 'ItemController@create']);
     Route::post('/items', ['as' => 'items.store', 'uses' => 'ItemController@store']);
     Route::get('/{item}', ['as' => 'items.show', 'uses' => 'ItemController@show']);

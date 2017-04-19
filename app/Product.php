@@ -29,7 +29,9 @@ class Product extends Model
     }
 
 
-    public function createItem($user_id, $title, $type, $description, $expirationDate, $quantity, $startingBid, $mailingServiceId, $picturePath){
+
+
+    public function createItem($user_id, $title, $type, $description, $expirationDate, $quantity, $startingBid, $mailingServiceId, $picturePath, $submittedCategories){
         $item = Product::fill([
             'user_id' => $user_id,
             'title' => $title,
@@ -41,6 +43,12 @@ class Product extends Model
             'mailingService_id' => $mailingServiceId,
             'picture' => $picturePath
         ]);
+
         $item->save();
+
+        foreach ($submittedCategories as $submittedCategory){
+            $category_id = intval($submittedCategory);
+            $item->categories()->attach($category_id);
+        }
     }
 }

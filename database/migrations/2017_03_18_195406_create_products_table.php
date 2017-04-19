@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateItemsTable extends Migration
+class CreateProductsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -20,9 +20,9 @@ class CreateItemsTable extends Migration
             $table->string('title');
             $table->tinyInteger('type');
             $table->text('description');
-            $table->timestamp('expirationDate');
-            $table->integer('quantity');
-            $table->float('startingBid');
+            $table->timestamp('expirationDate')->nullable();
+            $table->integer('quantity')->nullable();
+            $table->float('startingBid')->nullable();
             $table->string('picture');
             $table->integer('mailingService_id');
             $table->tinyInteger('blocked')->default(0);

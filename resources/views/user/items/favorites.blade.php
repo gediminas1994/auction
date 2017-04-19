@@ -3,7 +3,11 @@
 @section('content')
 
     <div class="container">
-        {{dd($favorites)}}
+        @foreach($favorites as $favorite)
+            <ul>
+                <li>{{ $favorite->title }}</li>
+            </ul>
+        @endforeach
     </div>
 
 @endsection

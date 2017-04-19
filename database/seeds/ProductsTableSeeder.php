@@ -3,7 +3,7 @@
 use Illuminate\Database\Seeder;
 use Carbon\Carbon;
 
-class productsTableSeeder extends Seeder
+class ProductsTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -214,7 +214,13 @@ class productsTableSeeder extends Seeder
         $products = \App\Product::all();
 
         foreach ($products as $product) {
-            $category = \App\Category::inRandomOrder()->first();
+            $category = \App\Category::inRandomOrder()
+                ->where('id', '!=', 1)
+                ->where('id', '!=', 5)
+                ->where('id', '!=', 9)
+                ->where('id', '!=', 13)
+                ->where('id', '!=', 17)
+                ->first();
 
             $category->products()->attach($product);
 

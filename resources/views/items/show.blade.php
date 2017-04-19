@@ -5,9 +5,14 @@
 
         <div class="row">
             <a href="{{ url()->previous() }}" class="btn btn-info">Back</a>
-            <a onclick="addToFavorites({{ json_encode(route('items.addToFavorites', $item->id)) }})" class="btn-success col-lg-1 pull-right">
-                <i class="fa fa-star" aria-hidden="true"></i>Favorite
-            </a>
+            {{ dd(Auth::user()->isProductFavorite($item->id)) }}
+            @if(Auth::user()->isProductFavorite($item->id))
+
+            @else
+                <a onclick="addToFavorites({{ json_encode(route('items.addToFavorites', $item->id)) }})" class="btn-success col-lg-1 pull-right">
+                    <i class="fa fa-star" aria-hidden="true"></i>Favorite
+                </a>
+            @endif
         </div>
 
         <div class="row">
@@ -83,6 +88,10 @@
                 }
             }).always(function () {
                 location.reload();
+            }).success(function () {
+                alert('success!');
+            }).error(function () {
+                alert(response);
             });
         }
     </script>

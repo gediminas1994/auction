@@ -98,7 +98,7 @@
                                             <i class="fa fa-diamond" aria-hidden="true"></i> My items
                                         </a>
 
-                                        <a href="{{ route('items.favorites') }}">
+                                        <a href="{{ route('items.showFavorites') }}">
                                             <i class="fa fa-star" aria-hidden="true"></i> Favorites
                                         </a>
 
@@ -148,7 +148,7 @@
     {{--SELECTIZE.JS--}}
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.4/js/standalone/selectize.min.js"></script>
     <script>
-        $('#tags').selectize({
+        $('#categories').selectize({
             maxItems: 3
         });
     </script>
