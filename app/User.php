@@ -45,6 +45,11 @@ class User extends Authenticatable
         return $this->belongsToMany(Product::class, 'favorites');
     }
 
+    public function rating()
+    {
+        return $this->hasOne(Rating::class);
+    }
+
     public function isProductFavorite($item_id){
         $answer = false;
         $favorites = Auth::user()->favorites;
@@ -53,7 +58,16 @@ class User extends Authenticatable
                 $answer = true;
             }
         }
-
         return $answer;
+    }
+
+    public function isUsersProduct($item_id){
+        $user = Auth::user();
+        $product = Product::where('user_id', $user->id)->find($item_id);
+        if(is_null($product)){
+            return false;
+        }else{
+            return true;
+        }
     }
 }

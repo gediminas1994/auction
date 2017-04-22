@@ -54,7 +54,7 @@
                     </button>
 
                     <!-- Branding Image -->
-                    <a class="navbar-brand" href="{{ url('/') }}">
+                    <a class="navbar-brand" href="{{ url('/') }}" style="font-size: 50px">
                         {{ config('app.name', 'Laravel') }}
                     </a>
                 </div>
@@ -62,7 +62,8 @@
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
                     <!-- Left Side Of Navbar -->
                     <ul class="nav navbar-nav">
-                        &nbsp;
+                        <li><a href="{{ route('items.showItemsByType', 'auctions') }}">Auctions</a></li>
+                        <li><a href="{{ route('items.showItemsByType', 'regularProducts') }}">Regular Products</a></li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->

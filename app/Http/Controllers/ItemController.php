@@ -130,4 +130,18 @@ class ItemController extends Controller
 
         return view('user.items.favorites')->with('favorites', $favorites);
     }
+
+    public function showItemsByType($type){
+        if($type == 'auctions'){
+            $items = Product::where('type', 0)
+                ->orderBy('created_at', 'desc')
+                ->paginate(9);
+        }else{
+            $items = Product::where('type', 1)
+                ->orderBy('created_at', 'desc')
+                ->paginate(9);
+        }
+
+        return view('items.index')->with('items', $items);
+    }
 }
