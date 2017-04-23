@@ -19,6 +19,10 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index');
 
+Route::group(['prefix' => 'rating'], function (){
+    Route::post('/submit/{user}', ['as' => 'rating.submit', 'uses' => 'RatingController@submitRating']);
+});
+
 Route::group(['prefix' => 'items'], function () {
     Route::get('/items', ['as' => 'items.index', 'uses' => 'ItemController@index']);
     Route::get('/create', ['as' => 'items.create', 'uses' => 'ItemController@create']);

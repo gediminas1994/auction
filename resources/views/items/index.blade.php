@@ -3,7 +3,11 @@
 @section('content')
     <div class="container">
         <div class="well well-sm" align="middle">
-            <strong>Welcome to eAuction!</strong>
+            @if($items->first()->type == 0)
+                <strong>Auctions</strong>
+            @else
+                <strong>Regular Products</strong>
+            @endif
         </div>
         <div id="products" class="row list-group">
             @foreach($items as $item)

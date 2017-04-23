@@ -97,14 +97,31 @@ class ItemController extends Controller
     public function edit($id)
     {
         $item = Product::find($id);
-        return view('items.edit')
-            ->with('item', $item);
+        if($item->user_id == Auth::user()->id){
+            return view('items.edit')
+                ->with('item', $item);
+        }else{
+            return redirect()->route('welcome');
+        }
+
     }
 
 
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request, [
+            'product_title' => 'required',
+            'product_description' => 'required'
+        ]);
+
+        $item = Product::find($id);
+        $item->title = $request->get('product_title');
+        $item->description = $request->get('product_description');
+        $item->save();
+
+        Session::flash('message','Product was successfully updated!');
+        return redirect()->route('user.listedItems', Auth::user());
+
     }
 
 

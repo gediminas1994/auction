@@ -8,27 +8,35 @@
 
             <div class="row">
                 <a href="{{ route('welcome') }}" class="btn btn-info">Back</a>
-
-                @if(Auth::user()->isUsersProduct($item->id))
-                    <div class="pull-right">TAI JUSU IKELTAS PRODUKTAS</div>
-                @elseif(Auth::user()->isProductFavorite($item->id))
-                    <div class="pull-right">SITAS PRODUKTAS ITRAUKTUS I JUSU FAVORITU SARASA</div>
+                @if(Auth::user())
+                    @if(Auth::user()->isUsersProduct($item->id))
+                        <div class="pull-right">TAI JUSU IKELTAS PRODUKTAS</div>
+                    @elseif(Auth::user()->isProductFavorite($item->id))
+                        <div class="pull-right">SITAS PRODUKTAS ITRAUKTUS I JUSU FAVORITU SARASA</div>
+                    @else
+                        <a onclick="addToFavorites({{ json_encode(route('items.addToFavorites', $item->id)) }})" class="col-lg-2 pull-right">
+                            <div style="text-align: center; color: green">
+                                <img src="/partials/3d-yellow-star.png" style="height: 30px; width: 30px">
+                                Add To Favorites
+                            </div>
+                        </a>
+                    @endif
                 @else
-                    <a onclick="addToFavorites({{ json_encode(route('items.addToFavorites', $item->id)) }})" class="col-lg-2 pull-right">
-                        <div style="text-align: center; color: green">
-                            <img src="/partials/3d-yellow-star.png" style="height: 30px; width: 30px">
-                            Add To Favorites
-                        </div>
-
-                    </a>
+                    <div class="pull-right">REGISTER TO ADD TO FAVORITES</div>
                 @endif
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    THIS IS AN AUCTION
+                </div>
             </div>
 
             <div class="row">
 
                 <div class="col-lg-6">
                     <h1>{{ $item->title }}</h1>
-                    <img src="{{ $item->picture }}" style="max-height: 500px; max-width: 400px; border-radius: 3px">
+                    <img src="/{{ $item->picture }}" style="max-height: 500px; max-width: 400px; border-radius: 3px">
                 </div>
 
                 <div class="col-lg-6">
@@ -88,10 +96,17 @@
     @else
         {{--REGULAR ITEM--}}
         <div class="container">
+
+            <div class="row">
+                <div class="col-md-12">
+                    THIS IS A REGULAR ITEM
+                </div>
+            </div>
+
             <div class="row">
                 <div class="col-sm-6">
                     {{--PICTURE--}}
-                    <img src="{{ $item->picture }}" alt="" class="img-responsive" style="margin-top: 25px; border-radius: 3px;">
+                    <img src="/{{ $item->picture }}" alt="" class="img-responsive" style="margin-top: 25px; border-radius: 3px;">
                 </div>
                 <div class="col-sm-6">
                     {{--INFORMATION--}}
@@ -130,7 +145,7 @@
                                 <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
                             </span>
                             <span>
-                                <input type="number" min="1" class="btn btn-default btn-sm" value="1"/>
+                                <input type="number" min="1" max="{{ $item->quantity }}" class="btn btn-default btn-sm" value="1"/>
                             </span>
                             <span class="btn btn-default btn-sm">
                                 <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
@@ -184,12 +199,38 @@
                             mailing services
                         </div>
                         <div role="tabpanel" class="tab-pane" id="user_rating">
-                            @if(Auth::user()->rating)
+                            @if($item->user->rating)
                                 <span>This Users Rating is: </span>
-                                <span>{{ number_format(Auth::user()->rating->total_rating/Auth::user()->rating->times_rated, 2) }}</span>
+                                <span>{{ number_format($item->user->rating->total_rating/$item->user->rating->times_rated, 2) }}<b>/5</b></span>
                             @else
                                 <div>This user has not been rated yet!</div>
                             @endif
+
+                            <br>
+                            <div>Give this user a rating!</div>
+
+                            <form enctype="multipart/form-data" action="{{ route('rating.submit', $item->user->id) }}" id="createItem" class="form-horizontal" method="POST" >
+                                {{csrf_field()}}
+
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <select class="form-control" name="rating">
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <button type="submit" class="btn btn-success">Submit</button>
+                                    </div>
+                                </div>
+
+
+                            </form>
+
                         </div>
                         <div role="tabpanel" class="tab-pane" id="comments">
                             comments
