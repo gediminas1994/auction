@@ -161,7 +161,8 @@
         $(function () {
             $('#datetimepicker1').datetimepicker({
                 format: 'YYYY-MM-DD hh:mm:ss',
-                defaultDate: moment()
+                defaultDate: moment(),
+                minDate: moment()-1
             });
         });
     </script>

@@ -10,6 +10,7 @@ use App\Tag;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
@@ -46,7 +47,8 @@ class ItemController extends Controller
             'picture' => 'required',
             'expirationDate' => 'required_if:type,0',
             'startingBid' => 'required_if:type,0',
-            'quantity' => 'required_if:type,1'
+            'quantity' => 'required_if:type,1',
+            'price' => 'required_if:type,1'
         ]);
 
         if ($validator->fails()) {
@@ -55,24 +57,29 @@ class ItemController extends Controller
                 ->withErrors($validator);
         }
 
+        $type = Input::get('type');
         $user_id = Auth::user()->id;
         $title = Input::get('title');
-        $type = Input::get('type');
         $description = Input::get('description');
-        $expirationDate = Input::get('expirationDate');
-        $quantity = Input::get('quantity');
-        $startingBid = Input::get('startingBid');
         $mailingServiceId = Input::get('mailing_services');
+        $submittedCategories = Input::get('categories');
         if(Input::hasFile('picture')){
             $picture = Input::file('picture');
-            $picture->move('items/', $picture->getClientOriginalName());
-            $picturePath = '/items/' . $picture->getClientOriginalName();
+            $picture->move('products/', $picture->getClientOriginalName());
+            $picturePath = 'products/' . $picture->getClientOriginalName();
         }
 
-        $submittedCategories = Input::get('categories');
-
         $item = new Product();
-        $item->createItem($user_id, $title, $type, $description, $expirationDate, $quantity, $startingBid, $mailingServiceId, $picturePath, $submittedCategories);
+
+        if($type == 0){
+            $expirationDate = Input::get('expirationDate');
+            $startingBid = Input::get('startingBid');
+            $item->createAuction($user_id, $title, $type, $description, $expirationDate,$startingBid, $mailingServiceId, $picturePath, $submittedCategories);
+        }else{
+            $quantity = Input::get('quantity');
+            $price = Input::get('price');
+            $item->createRegularItem($user_id, $title, $type, $description, $quantity, $price, $mailingServiceId, $picturePath, $submittedCategories);
+        }
 
         Session::flash('message','Product was created succesfully!');
 
@@ -105,6 +112,10 @@ class ItemController extends Controller
     {
         $item = Product::find($id);
         $item->delete();
+
+        if(File::exists($item->picture)){
+            File::delete($item->picture);
+        }
 
         Session::flash('message','Product was deleted');
     }

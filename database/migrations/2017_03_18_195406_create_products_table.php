@@ -23,6 +23,7 @@ class CreateProductsTable extends Migration
             $table->timestamp('expirationDate')->nullable();
             $table->integer('quantity')->nullable();
             $table->float('startingBid')->nullable();
+            $table->float('price')->nullable();
             $table->string('picture');
             $table->integer('mailingService_id');
             $table->tinyInteger('blocked')->default(0);

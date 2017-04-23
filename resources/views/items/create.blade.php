@@ -70,6 +70,13 @@
 			</div>
 		</div>
 
+		<div class="form-group regular-item">
+			<label for="price" class="col-sm-2 control-label">Price</label>
+			<div class="col-sm-8">
+				<input type="number" step="0.01" class="form-control" id="price" name="price">
+			</div>
+		</div>
+
 		<div class="form-group auction">
 			<label for="startingBid" class="col-sm-2 control-label">Starting Bid</label>
 			<div class="col-sm-8">

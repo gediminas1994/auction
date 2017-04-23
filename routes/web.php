@@ -10,7 +10,6 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::pattern('id', '[0-9]+');
 Route::pattern('item', '[0-9]+');
 Route::pattern('user', '[0-9]+');
 
@@ -19,6 +18,25 @@ Route::get('/', ['as' => 'welcome', 'uses' => 'WelcomeController@index']);
 Auth::routes();
 
 Route::get('/home', 'HomeController@index');
+
+Route::group(['prefix' => 'items'], function () {
+    Route::get('/items', ['as' => 'items.index', 'uses' => 'ItemController@index']);
+    Route::get('/create', ['as' => 'items.create', 'uses' => 'ItemController@create']);
+    Route::post('/items', ['as' => 'items.store', 'uses' => 'ItemController@store']);
+    Route::get('/{item}', ['as' => 'items.show', 'uses' => 'ItemController@show']);
+    Route::get('/{item}/edit', ['as' => 'items.edit', 'uses' => 'ItemController@edit']);
+    Route::patch('/{item}', ['as' => 'items.update', 'uses' => 'ItemController@update']);
+    Route::delete('/{item}', ['as' => 'items.destroy', 'uses' => 'ItemController@destroy']);
+
+    //users listed items
+    Route::get('/user/{user}', ['as' => 'user.listedItems', 'uses' => 'ItemController@listedItems']);
+
+    //list and add favorite items
+    Route::get('/favorites', ['as' => 'items.showFavorites', 'uses' => 'ItemController@showFavorites']);
+    Route::post('/favorites/{item}', ['as' => 'items.addToFavorites', 'uses' => 'ItemController@addToFavorites']);
+});
+
+Route::get('/{type}', ['as' => 'items.showItemsByType', 'uses' => 'ItemController@showItemsByType']);
 
 
 Route::group(['prefix' => 'admin', 'namespace' => 'admin', 'middleware' => 'auth'], function (){
@@ -48,23 +66,6 @@ Route::group(['prefix' => 'user', 'namespace' => 'user', 'middleware' => 'auth']
     Route::delete('/{user}/bankAccounts/{bankRecord}', ['as' => 'user.bankAccounts.destroy', 'uses' => 'BankAccountsController@destroy']);
 });
 
-Route::group(['prefix' => 'items'], function () {
-    Route::get('/items', ['as' => 'items.index', 'uses' => 'ItemController@index']);
-    Route::get('/create', ['as' => 'items.create', 'uses' => 'ItemController@create']);
-    Route::post('/items', ['as' => 'items.store', 'uses' => 'ItemController@store']);
-    Route::get('/{item}', ['as' => 'items.show', 'uses' => 'ItemController@show']);
-    Route::get('/{item}/edit', ['as' => 'items.edit', 'uses' => 'ItemController@edit']);
-    Route::patch('/{item}', ['as' => 'items.update', 'uses' => 'ItemController@update']);
-    Route::delete('/{item}', ['as' => 'items.destroy', 'uses' => 'ItemController@destroy']);
-
-    Route::get('/{type}', ['as' => 'items.showItemsByType', 'uses' => 'ItemController@showItemsByType']);
-    //users listed items
-    Route::get('/user/{user}', ['as' => 'user.listedItems', 'uses' => 'ItemController@listedItems']);
-
-    //list and add favorite items
-    Route::get('/favorites', ['as' => 'items.showFavorites', 'uses' => 'ItemController@showFavorites']);
-    Route::post('/favorites/{item}', ['as' => 'items.addToFavorites', 'uses' => 'ItemController@addToFavorites']);
-});
 
 
 
