@@ -1,33 +1,18 @@
-<!-- Sidebar -->
-<div class="sidebar-wrapper">
-    {{$subcategories}}
-    <ul class="sidebar-nav">
-        <li class="sidebar-brand">
-            <a href="#">
-                Start Bootstrap
-            </a>
-        </li>
-        <li>
-            <a href="#">Dashboard</a>
-        </li>
-        <li>
-            <a href="#">Shortcuts</a>
-        </li>
-        <li>
-            <a href="#">Overview</a>
-        </li>
-        <li>
-            <a href="#">Events</a>
-        </li>
-        <li>
-            <a href="#">About</a>
-        </li>
-        <li>
-            <a href="#">Services</a>
-        </li>
-        <li>
-            <a href="#">Contact</a>
-        </li>
-    </ul>
+<div class="just-padding">
+
+    <div class="list-group list-group-root well">
+
+        @foreach($categories as $category)
+            <div class="list-group">
+                <a href="#" class="list-group-item">{{ $category->title }}</a>
+                <div class="list-group">
+                    @foreach($subcategories->where('parent_id', $category->id) as $subcategory)
+                        <a href="#" class="list-group-item">{{ $subcategory->title }}</a>
+                    @endforeach()
+                </div>
+            </div>
+        @endforeach
+
+    </div>
+
 </div>
-<!-- /#sidebar-wrapper -->

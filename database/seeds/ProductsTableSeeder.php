@@ -26,7 +26,10 @@ class ProductsTableSeeder extends Seeder
                     'expirationDate' => $faker->dateTimeBetween($date, $date->addWeek()),
                     'startingBid' => $faker->randomFloat(2, 0.50, 250),
                     'mailingService_id' => rand(1,5),
-                    'picture' => substr($faker->image($dir = public_path(). '/products/'), 22),
+                    //JEIGU ANT LAPTOPO
+                    //'picture' => substr($faker->image($dir = public_path(). '/products/'), 22),
+                    //JEIGU ANT STALINIO
+                    'picture' => substr($faker->image($dir = public_path(). '/products/'), 38),
                     'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                     'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 ]);
@@ -39,7 +42,10 @@ class ProductsTableSeeder extends Seeder
                     'quantity' => rand(1,25),
                     'price' => $faker->randomFloat(2,0.50,250),
                     'mailingService_id' => rand(1,5),
-                    'picture' => substr($faker->image($dir = public_path(). '/products/'), 22),
+                    //JEIGU ANT LAPTOPO
+                    //'picture' => substr($faker->image($dir = public_path(). '/products/'), 22),
+                    //JEIGU ANT STALINIO
+                    'picture' => substr($faker->image($dir = public_path(). '/products/'), 38),
                     'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                     'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 ]);
