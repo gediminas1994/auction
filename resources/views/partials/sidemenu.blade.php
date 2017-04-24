@@ -1,5 +1,6 @@
 <!-- Sidebar -->
 <div class="sidebar-wrapper">
+    {{$subcategories}}
     <ul class="sidebar-nav">
         <li class="sidebar-brand">
             <a href="#">

@@ -115,6 +115,17 @@ class ItemController extends Controller
         ]);
 
         $item = Product::find($id);
+        //ROUTE SERVICE PROVIDER
+        /*//public function boot()
+        {
+            //
+
+            parent::boot();
+
+            Route::bind('part_id', function ($value) {
+                return RecarPartModel::findOrFail($value);
+            });
+        }*/
         $item->title = $request->get('product_title');
         $item->description = $request->get('product_description');
         $item->save();

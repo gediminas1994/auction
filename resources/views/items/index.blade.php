@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container">
+    <div class="container-fluid">
         <div class="well well-sm" align="middle">
             @if($items->first()->type == 0)
                 <strong>Auctions</strong>

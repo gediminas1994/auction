@@ -10,8 +10,8 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::pattern('item', '[0-9]+');
-Route::pattern('user', '[0-9]+');
+/*Route::pattern('item', '[0-9]+');
+Route::pattern('user', '[0-9]+');*/
 
 Route::get('/', ['as' => 'welcome', 'uses' => 'WelcomeController@index']);
 
@@ -27,6 +27,9 @@ Route::group(['prefix' => 'items'], function () {
     Route::get('/items', ['as' => 'items.index', 'uses' => 'ItemController@index']);
     Route::get('/create', ['as' => 'items.create', 'uses' => 'ItemController@create']);
     Route::post('/items', ['as' => 'items.store', 'uses' => 'ItemController@store']);
+    //show favorites
+    Route::get('/favorites', ['as' => 'items.showFavorites', 'uses' => 'ItemController@showFavorites']);
+
     Route::get('/{item}', ['as' => 'items.show', 'uses' => 'ItemController@show']);
     Route::get('/{item}/edit', ['as' => 'items.edit', 'uses' => 'ItemController@edit']);
     Route::patch('/{item}', ['as' => 'items.update', 'uses' => 'ItemController@update']);
@@ -35,8 +38,7 @@ Route::group(['prefix' => 'items'], function () {
     //users listed items
     Route::get('/user/{user}', ['as' => 'user.listedItems', 'uses' => 'ItemController@listedItems']);
 
-    //list and add favorite items
-    Route::get('/favorites', ['as' => 'items.showFavorites', 'uses' => 'ItemController@showFavorites']);
+    //add favorite items
     Route::post('/favorites/{item}', ['as' => 'items.addToFavorites', 'uses' => 'ItemController@addToFavorites']);
 });
 

@@ -37,8 +37,6 @@
 </head>
 <body>
 
-    {{--@include('partials.sidemenu')--}}
-
     <div id="app">
         <nav class="navbar navbar-default navbar-static-top">
             <div class="container">
@@ -140,7 +138,17 @@
             </div>
         </nav>
 
-        @yield('content')
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-2">
+                    @include('partials.sidemenu')
+                </div>
+                <div class="col-md-10">
+                    @yield('content')
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <!-- Scripts -->

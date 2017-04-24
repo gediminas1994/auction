@@ -1,3 +1,17 @@
 .sidebar-wrapper{
   color: red;
 }
+
+@media screen and (min-width: 992px) {
+.row-eq-height {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display:         flex;
+}
+}
+
+.list-group-item-text{
+  height: 72px;
+  overflow-y: hidden;
+}
