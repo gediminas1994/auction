@@ -17,10 +17,49 @@ Route::get('/', ['as' => 'welcome', 'uses' => 'WelcomeController@index']);
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index');
+Route::get('/home', ['as' => 'home', 'uses' => 'HomeController@index']);
 
 Route::group(['prefix' => 'rating'], function (){
     Route::post('/submit/{user}', ['as' => 'rating.submit', 'uses' => 'RatingController@submitRating']);
+});
+
+Route::get('/{type}', ['as' => 'items.showItemsByType', 'uses' => 'ItemController@showItemsByType']);
+
+Route::group(['prefix' => 'search'], function () {
+    Route::get('/search', ['as' => 'search.keyword', 'uses' => 'SearchController@keyword']);
+    Route::get('/{category}', ['as' => 'search.category', 'uses' => 'SearchController@category']);
+    Route::get('/{subcategory}', ['as' => 'search.subcategory', 'uses' => 'SearchController@subcategory']);
+});
+
+Route::group(['prefix' => 'admin', 'namespace' => 'admin', 'middleware' => 'auth'], function (){
+    Route::group(['prefix' => 'users'], function () {
+        //user CRUD as admin
+        Route::get('/', ['as' => 'admin.users.index', 'uses' => 'UsersController@index']);
+        Route::get('/{user}', ['as' => 'admin.users.show', 'uses' => 'UsersController@show']);
+        Route::get('/{user}/edit', ['as' => 'admin.users.edit', 'uses' => 'UsersController@edit']);
+        Route::patch('/{user}', ['as' => 'admin.users.update', 'uses' => 'UsersController@update']);
+        Route::delete('/{user}', ['as' => 'admin.users.destroy', 'uses' => 'UsersController@destroy']);
+        //block and unblock users as admin
+        Route::post('/{user}', ['as' => 'admin.users.block_unblock', 'uses' => 'UsersController@block_unblock']);
+    });
+
+    Route::group(['prefix' => 'items'], function () {
+        Route::get('/', ['as' => 'admin.items.index', 'uses' => 'ItemController@index']);
+    });
+});
+
+Route::group(['prefix' => 'user', 'namespace' => 'user', 'middleware' => 'auth'], function () {
+    //user info
+    Route::get('/{user}', ['as' => 'user.show', 'uses' => 'UsersController@show']);
+    Route::get('/{user}/edit', ['as' => 'user.edit', 'uses' => 'UsersController@show']);
+    Route::patch('/{user}', ['as' => 'user.update', 'uses' => 'UsersController@update']);
+
+    //user bank Accounts
+    Route::get('/{user}/bankAccounts', ['as' => 'user.bankAccounts', 'uses' => 'BankAccountsController@index']);
+    Route::post('/{user}/bankAccounts', ['as' => 'user.bankAccounts.store', 'uses' => 'BankAccountsController@store']);
+    Route::get('/{user}/bankAccounts/{bankRecord}/edit', ['as' => 'user.bankAccounts.edit', 'uses' => 'BankAccountsController@edit']);
+    Route::patch('/{user}/bankAccounts/{bankRecord}', ['as' => 'user.bankAccounts.update', 'uses' => 'BankAccountsController@update']);
+    Route::delete('/{user}/bankAccounts/{bankRecord}', ['as' => 'user.bankAccounts.destroy', 'uses' => 'BankAccountsController@destroy']);
 });
 
 Route::group(['prefix' => 'items'], function () {
@@ -42,41 +81,25 @@ Route::group(['prefix' => 'items'], function () {
     Route::post('/favorites/{item}', ['as' => 'items.addToFavorites', 'uses' => 'ItemController@addToFavorites']);
 });
 
-Route::get('/{type}', ['as' => 'items.showItemsByType', 'uses' => 'ItemController@showItemsByType']);
+/*Route::get('/pusher', function() {
+    $options = array(
+        'cluster' => 'eu',
+        'encrypted' => true
+    );
+    $pusher = new Pusher(
+        '56324d700add5418fe77',
+        '5fbbe373cb0f8ba911cd',
+        '333637',
+        $options
+    );
 
+    $data['message'] = 'dejau ant bakalauro';
+    $pusher->trigger('my-channel', 'my-event', $data);
 
-Route::group(['prefix' => 'admin', 'namespace' => 'admin', 'middleware' => 'auth'], function (){
-    Route::group(['prefix' => 'users'], function () {
-        //user CRUD as admin
-        Route::get('/', ['as' => 'admin.users.index', 'uses' => 'UsersController@index']);
-        Route::get('/{user}', ['as' => 'admin.users.show', 'uses' => 'UsersController@show']);
-        Route::get('/{user}/edit', ['as' => 'admin.users.edit', 'uses' => 'UsersController@edit']);
-        Route::patch('/{user}', ['as' => 'admin.users.update', 'uses' => 'UsersController@update']);
-        Route::delete('/{user}', ['as' => 'admin.users.destroy', 'uses' => 'UsersController@destroy']);
-        //block and unblock users as admin
-        Route::post('/{user}', ['as' => 'admin.users.block_unblock', 'uses' => 'UsersController@block_unblock']);
-    });
-});
+    $items = \App\Product::paginate(5);
 
-Route::group(['prefix' => 'user', 'namespace' => 'user', 'middleware' => 'auth'], function () {
-    //user info
-    Route::get('/{user}', ['as' => 'user.show', 'uses' => 'UsersController@show']);
-    Route::get('/{user}/edit', ['as' => 'user.edit', 'uses' => 'UsersController@show']);
-    Route::patch('/{user}', ['as' => 'user.update', 'uses' => 'UsersController@update']);
-
-    //user bank Accounts
-    Route::get('/{user}/bankAccounts', ['as' => 'user.bankAccounts', 'uses' => 'BankAccountsController@index']);
-    Route::post('/{user}/bankAccounts', ['as' => 'user.bankAccounts.store', 'uses' => 'BankAccountsController@store']);
-    Route::get('/{user}/bankAccounts/{bankRecord}/edit', ['as' => 'user.bankAccounts.edit', 'uses' => 'BankAccountsController@edit']);
-    Route::patch('/{user}/bankAccounts/{bankRecord}', ['as' => 'user.bankAccounts.update', 'uses' => 'BankAccountsController@update']);
-    Route::delete('/{user}/bankAccounts/{bankRecord}', ['as' => 'user.bankAccounts.destroy', 'uses' => 'BankAccountsController@destroy']);
-});
-
-
-
-
-
-
+    return view('welcome')->with('items', $items);
+});*/
 
 
 /*Route::get('/vueTest', function () {

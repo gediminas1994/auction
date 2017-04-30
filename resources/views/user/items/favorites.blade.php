@@ -2,11 +2,11 @@
 
 @section('content')
 
-    <div class="container">
+    <div class="container-fluid">
         <div>FAVORITES</div>
         @foreach($favorites as $favorite)
             <ul>
-                <li>{{ $favorite->title }}</li>
+                <li><a href="{{ route('items.show', $favorite->id) }}">{{ $favorite->title }}</a></li>
             </ul>
         @endforeach
     </div>

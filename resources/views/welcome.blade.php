@@ -48,4 +48,22 @@
         </div>
     </div>
 
+    <script src="https://js.pusher.com/4.0/pusher.min.js"></script>
+    <script>
+
+        Pusher.log = function(msg) {
+            console.log(msg);
+        };
+
+        let pusher = new Pusher('{{env("PUSHER_APP_KEY")}}', {
+            cluster: 'eu',
+            encrypted: true
+        });
+
+        let channel = pusher.subscribe('test-channel');
+        channel.bind('test-event', function(data) {
+            alert(data.message);
+        });
+    </script>
+
 @endsection

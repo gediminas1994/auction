@@ -4,12 +4,23 @@
 
     @if($item->type == 0)
         {{--AUCTION--}}
-        <div class="container">
+        <div class="container-fluid">
 
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-11">
                     <i class="fa fa-gavel fa-3x" aria-hidden="true"></i>
                     <b style="font-size: 3em;">Auction</b>
+                    @if(Auth::user())
+                        @if(Auth::user()->isUsersProduct($item->id))
+                            {{--Users item, so show nothing--}}
+                        @elseif(Auth::user()->isProductFavorite($item->id))
+                            <div class="col-md-4 alert alert-info pull-right text-center">
+                                <strong>Product is in your favorite list</strong>
+                            </div>
+                        @else
+                            <a onclick="addToFavorites({{ json_encode(route('items.addToFavorites', $item->id)) }})" class="btn btn-success btn-lg pull-right" style="cursor: pointer"><i class="fa fa-star" aria-hidden="true"></i> Add To Favorites</a>
+                        @endif
+                    @endif
                 </div>
             </div>
 
@@ -154,12 +165,23 @@
         </div>
     @else
         {{--REGULAR ITEM--}}
-        <div class="container">
+        <div class="container-fluid">
 
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-11">
                     <i class="fa fa-cubes fa-3x" aria-hidden="true"></i>
                     <b style="font-size: 3em;">Regular Product</b>
+                    @if(Auth::user())
+                        @if(Auth::user()->isUsersProduct($item->id))
+                            {{--Users item, so show nothing--}}
+                        @elseif(Auth::user()->isProductFavorite($item->id))
+                            <div class="col-md-4 alert alert-info pull-right text-center">
+                                <strong>Product is in your favorite list</strong>
+                            </div>
+                        @else
+                            <a onclick="addToFavorites({{ json_encode(route('items.addToFavorites', $item->id)) }})" class="btn btn-success btn-lg pull-right" style="cursor: pointer"><i class="fa fa-star" aria-hidden="true"></i> Add To Favorites</a>
+                        @endif
+                    @endif
                 </div>
             </div>
 

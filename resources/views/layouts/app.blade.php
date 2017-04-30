@@ -60,9 +60,25 @@
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
                     <!-- Left Side Of Navbar -->
                     <ul class="nav navbar-nav">
+                        @if(Auth::user())
+                            <li><a href="{{ route('home') }}">Home</a></li>
+                        @endif
                         <li><a href="{{ route('items.showItemsByType', 'auctions') }}">Auctions</a></li>
                         <li><a href="{{ route('items.showItemsByType', 'regularProducts') }}">Regular Products</a></li>
                     </ul>
+
+                    <div class="col-sm-3 col-md-3">
+                        <form class="navbar-form" action="{{ route('search.keyword') }}" role="search">
+                            {{csrf_field()}}
+
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Search..." name="keyword">
+                                <div class="input-group-btn">
+                                    <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
 
                     <!-- Right Side Of Navbar -->
                     <ul class="nav navbar-nav navbar-right">
@@ -140,11 +156,10 @@
 
         <div class="container-fluid">
             <div class="row">
-                <div class="col-md-1"></div>
-                <div class="col-md-2">
+                <div class="col-md-3">
                     @include('partials.sidemenu')
                 </div>
-                <div class="col-md-8">
+                <div class="col-md-9">
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-lg-12">
@@ -160,7 +175,6 @@
                     </div>
                     @yield('content')
                 </div>
-                <div class="col-md-1"></div>
             </div>
         </div>
 

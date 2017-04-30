@@ -27,9 +27,9 @@ class ProductsTableSeeder extends Seeder
                     'startingBid' => $faker->randomFloat(2, 0.50, 250),
                     'mailingService_id' => rand(1,5),
                     //JEIGU ANT LAPTOPO
-                    //'picture' => substr($faker->image($dir = public_path(). '/products/'), 22),
+                    'picture' => substr($faker->image($dir = public_path(). '/products/'), 22),
                     //JEIGU ANT STALINIO
-                    'picture' => substr($faker->image($dir = public_path(). '/products/'), 38),
+//                    'picture' => substr($faker->image($dir = public_path(). '/products/'), 38),
                     'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                     'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 ]);
@@ -43,9 +43,9 @@ class ProductsTableSeeder extends Seeder
                     'price' => $faker->randomFloat(2,0.50,250),
                     'mailingService_id' => rand(1,5),
                     //JEIGU ANT LAPTOPO
-                    //'picture' => substr($faker->image($dir = public_path(). '/products/'), 22),
+                    'picture' => substr($faker->image($dir = public_path(). '/products/'), 22),
                     //JEIGU ANT STALINIO
-                    'picture' => substr($faker->image($dir = public_path(). '/products/'), 38),
+//                    'picture' => substr($faker->image($dir = public_path(). '/products/'), 38),
                     'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                     'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 ]);
