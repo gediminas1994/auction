@@ -69,8 +69,6 @@
 
                     <div class="col-sm-3 col-md-3">
                         <form class="navbar-form" action="{{ route('search.keyword') }}" role="search">
-                            {{csrf_field()}}
-
                             <div class="input-group">
                                 <input type="text" class="form-control" placeholder="Search..." name="keyword">
                                 <div class="input-group-btn">

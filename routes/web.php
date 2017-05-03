@@ -12,6 +12,25 @@
 */
 /*Route::pattern('item', '[0-9]+');
 Route::pattern('user', '[0-9]+');*/
+Route::get('/pusher', function() {
+    $options = array(
+        'cluster' => 'eu',
+        'encrypted' => true
+    );
+    $pusher = new Pusher(
+        '56324d700add5418fe77',
+        '5fbbe373cb0f8ba911cd',
+        '333637',
+        $options
+    );
+
+    $data['message'] = 'watwatwat';
+    $pusher->trigger('my-channel', 'my-event', $data);
+
+    $items = \App\Product::paginate(5);
+
+    return view('welcome')->with('items', $items);
+});
 
 Route::get('/', ['as' => 'welcome', 'uses' => 'WelcomeController@index']);
 
@@ -28,7 +47,6 @@ Route::get('/{type}', ['as' => 'items.showItemsByType', 'uses' => 'ItemControlle
 Route::group(['prefix' => 'search'], function () {
     Route::get('/search', ['as' => 'search.keyword', 'uses' => 'SearchController@keyword']);
     Route::get('/{category}', ['as' => 'search.category', 'uses' => 'SearchController@category']);
-    Route::get('/{subcategory}', ['as' => 'search.subcategory', 'uses' => 'SearchController@subcategory']);
 });
 
 Route::group(['prefix' => 'admin', 'namespace' => 'admin', 'middleware' => 'auth'], function (){
@@ -81,25 +99,8 @@ Route::group(['prefix' => 'items'], function () {
     Route::post('/favorites/{item}', ['as' => 'items.addToFavorites', 'uses' => 'ItemController@addToFavorites']);
 });
 
-/*Route::get('/pusher', function() {
-    $options = array(
-        'cluster' => 'eu',
-        'encrypted' => true
-    );
-    $pusher = new Pusher(
-        '56324d700add5418fe77',
-        '5fbbe373cb0f8ba911cd',
-        '333637',
-        $options
-    );
+Route::post('/bids/submitBid', ['as' => 'bids.submit', 'uses' => 'BidController@submit']);
 
-    $data['message'] = 'dejau ant bakalauro';
-    $pusher->trigger('my-channel', 'my-event', $data);
-
-    $items = \App\Product::paginate(5);
-
-    return view('welcome')->with('items', $items);
-});*/
 
 
 /*Route::get('/vueTest', function () {

@@ -50,6 +50,10 @@ class User extends Authenticatable
         return $this->hasOne(Rating::class);
     }
 
+    public function auction(){
+        return $this->belongsToMany(Product::class, 'bids')->withPivot('amount');
+    }
+
     public function isProductFavorite($item_id){
         $answer = false;
         $favorites = Auth::user()->favorites;

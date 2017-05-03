@@ -3,9 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Scout\Searchable;
 
 class Product extends Model
 {
+    use Searchable;
+
     protected $fillable = [
         'user_id',
         'title',
@@ -27,6 +30,10 @@ class Product extends Model
 
     public function categories(){
         return $this->belongsToMany(Category::class);
+    }
+
+    public function users(){
+        return $this->belongsToMany(User::class, 'bids')->withPivot('amount');
     }
 
     public function createAuction($user_id, $title, $type, $description, $expirationDate,$startingBid, $mailingServiceId, $picturePath, $submittedCategories){
@@ -67,5 +74,21 @@ class Product extends Model
             $category_id = intval($submittedCategory);
             $item->categories()->attach($category_id);
         }
+    }
+
+    //Algolia function 1
+    public function searchableAs()
+    {
+        return 'title';
+    }
+
+    //Algolia function 2
+    public function toSearchableArray()
+    {
+        $array = $this->toArray();
+
+        // Customize array...
+
+        return $array;
     }
 }
