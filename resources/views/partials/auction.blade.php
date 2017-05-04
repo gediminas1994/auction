@@ -23,13 +23,6 @@
         <div class="col-sm-6">
             {{--PICTURE--}}
             <img src="/{{ $item->picture }}" alt="" class="img-responsive" style="margin-top: 25px; border-radius: 3px;">
-
-
-            <div style="position: fixed; top: 0; right: 0; width: 200px; min-height: 100px; background-color: #eee; padding: 20px;">
-                <div id="status"></div>
-                <ul id="bids" style="font-size: 10px;"></ul>
-            </div>
-
         </div>
         <div class="col-sm-6">
             {{--INFORMATION--}}
@@ -252,7 +245,9 @@
         });
 
         // Build POST data and make AJAX request
-        let variables = {bid_amount: bidAmount};
+        let variables = {
+            bid_amount: bidAmount
+        };
 //        $.post('/bids/submitBid', data).success(notifySuccess);
         $.ajax({
             type: "POST",

@@ -12,25 +12,6 @@
 */
 /*Route::pattern('item', '[0-9]+');
 Route::pattern('user', '[0-9]+');*/
-Route::get('/pusher', function() {
-    $options = array(
-        'cluster' => 'eu',
-        'encrypted' => true
-    );
-    $pusher = new Pusher(
-        '56324d700add5418fe77',
-        '5fbbe373cb0f8ba911cd',
-        '333637',
-        $options
-    );
-
-    $data['message'] = 'watwatwat';
-    $pusher->trigger('my-channel', 'my-event', $data);
-
-    $items = \App\Product::paginate(5);
-
-    return view('welcome')->with('items', $items);
-});
 
 Route::get('/', ['as' => 'welcome', 'uses' => 'WelcomeController@index']);
 

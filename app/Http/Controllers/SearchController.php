@@ -20,8 +20,15 @@ class SearchController extends Controller
     }
 
     public function category(Category $category){
-        $items = $category->products;
-        $keyword = $category->title;
+        if(is_null($category->parent_id)){
+//            KATEGORIJA
+            dd('category query');
+            $keyword = $category->title;
+        }else{
+//            SUBKATEGORIJA
+            $items = $category->products;
+            $keyword = $category->title;
+        }
 
         return view('items.searched')
             ->with('items', $items)
