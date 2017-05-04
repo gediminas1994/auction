@@ -50,8 +50,8 @@ class User extends Authenticatable
         return $this->hasOne(Rating::class);
     }
 
-    public function auction(){
-        return $this->belongsToMany(Product::class, 'bids')->withPivot('amount');
+    public function bids(){
+        return $this->belongsToMany(Product::class, 'bids', 'user_id', 'product_id')->withPivot('amount');
     }
 
     public function isProductFavorite($item_id){

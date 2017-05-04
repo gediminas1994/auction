@@ -36,10 +36,10 @@
                 <div class="col-sm-12">
                     <span>Categories:</span>
                     <span>
-                                @foreach($item->categories as $category)
+                        @foreach($item->categories as $category)
                             <span><a href="#" class="label label-primary">{{ $category->title }}</a></span>
                         @endforeach
-                            </span>
+                    </span>
                 </div>
             </div>
 
@@ -51,13 +51,34 @@
 
             <div class="row add-to-cart">
                 <div class="col-sm-12 product-qty">
-                    <h3 id="currentBid">Current bid: <span style="color: green">{{--<small> by John Doe</small>--}}</span></h3>
+                    <h3>Current highest bid:
+                        <span id="currentBid" style="color: green">
+                            @if(count($item->bids))
+                                {{ $item->bids()->max('amount') . ' submitted by ' . $item->bids()->where('amount', $item->bids()->max('amount'))->first()->username }}
+                            @else
+                                No bids have been made yet
+                            @endif
+                           {{-- {{ (!is_null($item->bids)) ? $item->bids()->max('amount') . ' submitted by ' . $item->bids()->where('amount', $item->bids()->max('amount'))->first()->username : 'No bids have been made yet' }}--}}
+                        </span>
+                    </h3>
                 </div>
-                <div class="col-md-8">
-                    <input class="form-control" type="number" id="bid_amount" name="bid_amount" placeholder="Enter Bid" required />
-                    <br>
-                    <button id="submitButton" class="btn btn-success btn-sm">Place your bid</button>
-                </div>
+                @if(Auth::user())
+                    @if(Auth::user()->isUsersProduct($item->id))
+                        <div class="col-md-8">
+                            <div class="alert alert-info">You can't bid on your own item!</div>
+                        </div>
+                    @else
+                        <div class="col-md-8">
+                            <input class="form-control" type="number" id="bid_amount" name="bid_amount" placeholder="Enter Bid" required />
+                            <br>
+                            <button id="submitButton" class="btn btn-success btn-sm">Place your bid</button>
+                        </div>
+                    @endif
+                @else
+                    <div class="col-md-8">
+                        <div class="alert alert-danger">You have to be logged in to bid!</div>
+                    </div>
+                @endif
             </div><!-- end row -->
 
             <br>
@@ -234,9 +255,12 @@
         $('#submitButton').click(notifySubmit);
     }
 
+    @if(Auth::user())
     // Handle the form submission
     function notifySubmit() {
         let bidAmount = $('#bid_amount').val();
+        let itemID = '{{ $item->id }}';
+        let userID = '{{ Auth::user()->id }}';
 
         $.ajaxSetup({
             headers: {
@@ -246,7 +270,9 @@
 
         // Build POST data and make AJAX request
         let variables = {
-            bid_amount: bidAmount
+            bid_amount: bidAmount,
+            item_id: itemID,
+            user_id: userID
         };
 //        $.post('/bids/submitBid', data).success(notifySuccess);
         $.ajax({
@@ -261,7 +287,7 @@
         // Ensure the normal browser event doesn't take place
         return false;
     }
-
+    @endif
     // Handle the success callback
     function notifySuccess() {
         console.log('notification submitted');
@@ -288,8 +314,8 @@
 
     let channel = pusher.subscribe('auction');
     channel.bind('bid', function(data) {
-        //toastr.info(data.amount);
-        $('#currentBid').append('<li><strong>New bid incoming ' + data.amount + '</strong></li>');
-        // do something with the event data.amount
+        toastr.info(data.amount);
+        //$('#currentBid').append('<li><strong>New bid ' + data.amount + ' by ' + data.username + '</strong></li>');
+        $('#currentBid').text(data.amount + ' submitted by ' + data.username);
     });
 </script>

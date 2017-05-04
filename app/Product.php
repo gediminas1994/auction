@@ -32,8 +32,8 @@ class Product extends Model
         return $this->belongsToMany(Category::class);
     }
 
-    public function users(){
-        return $this->belongsToMany(User::class, 'bids')->withPivot('amount');
+    public function bids(){
+        return $this->belongsToMany(User::class, 'bids', 'product_id', 'user_id')->withPivot('amount');
     }
 
     public function createAuction($user_id, $title, $type, $description, $expirationDate,$startingBid, $mailingServiceId, $picturePath, $submittedCategories){

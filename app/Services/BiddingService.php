@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Product;
 use App\User;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Vinkla\Pusher\PusherManager;
 
 class BiddingService
@@ -18,11 +19,12 @@ class BiddingService
         $this->user = $user;
     }
 
-    public function bid(Product $product, $amount)
+    public function bid($amount, $item_id, $user_id)
     {
-        // $this->user->bid()->attach($auction, ['amount' => $amount]);
+        $user = User::find($user_id);
+        $user->bids()->attach($item_id, ['amount' => $amount]);
 
-        $response = $this->pusher->trigger('auction', 'bid', ['amount' => $amount]);
+        $response = $this->pusher->trigger('auction', 'bid', ['amount' => $amount, 'username' => $user->username]);
 
         return $response;
     }
