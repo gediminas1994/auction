@@ -26,8 +26,32 @@ class BidController extends Controller
         $item_id = $request->item_id;
         $user_id = $request->user_id;
 
-        $success = $this->BiddingService->bid($bid_amount, $item_id, $user_id);
+        $item = Product::find($item_id);
+        $currentMaxBid = $item->bids()->max('amount');
 
-        return response()->json($success);
+        $bidDifference = $currentMaxBid - $bid_amount;
+
+        $valueRange = collect([
+            ['lowest' => 0.01, 'highest' => 0.99, 'minimumDifference' => 0.05],
+            ['lowest' => 1.00, 'highest' => 4.99, 'minimumDifference' => 0.25],
+            ['lowest' => 5.00, 'highest' => 24.99, 'minimumDifference' => 0.50],
+            ['lowest' => 25.00, 'highest' => 99.99, 'minimumDifference' => 1.00],
+            ['lowest' => 100.00, 'highest' => 249.99, 'minimumDifference' => 2.50],
+            ['lowest' => 250.00, 'highest' => 999999.00, 'minimumDifference' => 5.00],
+        ]);
+
+        $fittingValues = $valueRange->filter(function ($value) use ($currentMaxBid) {
+            return $currentMaxBid >= $value['lowest'] && $currentMaxBid <= $value['highest'];
+        })->collapse();
+
+        if ($bidDifference > $fittingValues['minimumDifference']) {
+            $neededValue = $currentMaxBid + $fittingValues['minimumDifference'];
+            $error = "Can't bid lower than $neededValue";
+            return response()->json($error);
+        }else{
+            $success = $this->BiddingService->bid($bid_amount, $item_id, $user_id);
+            return response()->json($success);
+        }
+
     }
 }

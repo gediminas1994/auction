@@ -281,6 +281,10 @@
             data: variables,
             success: function () {
                 notifySuccess();
+            },
+            error: function () {
+                notifyError();
+//                toastr.danger('bad bid');
             }
         });
 
@@ -291,6 +295,9 @@
     // Handle the success callback
     function notifySuccess() {
         console.log('notification submitted');
+    }
+    function notifyError() {
+        console.log('error');
     }
 
     $(notifyInit); // Existing functionality
@@ -318,4 +325,6 @@
         //$('#currentBid').append('<li><strong>New bid ' + data.amount + ' by ' + data.username + '</strong></li>');
         $('#currentBid').text(data.amount + ' submitted by ' + data.username);
     });
+
+    @include('partials.errors')
 </script>
