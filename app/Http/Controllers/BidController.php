@@ -7,6 +7,7 @@ use App\User;
 use Illuminate\Http\Request;
 use App\Services\BiddingService;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 class BidController extends Controller
 {
@@ -28,8 +29,10 @@ class BidController extends Controller
 
         $item = Product::find($item_id);
         $currentMaxBid = $item->bids()->max('amount');
-
-        $bidDifference = $currentMaxBid - $bid_amount;
+        //jeigu nera bidu ima startine autoriaus nustatyta kaina
+        if(!$currentMaxBid){
+            $currentMaxBid = $item->startingBid;
+        }
 
         $valueRange = collect([
             ['lowest' => 0.01, 'highest' => 0.99, 'minimumDifference' => 0.05],
@@ -44,9 +47,11 @@ class BidController extends Controller
             return $currentMaxBid >= $value['lowest'] && $currentMaxBid <= $value['highest'];
         })->collapse();
 
-        if ($bidDifference > $fittingValues['minimumDifference']) {
-            $neededValue = $currentMaxBid + $fittingValues['minimumDifference'];
-            $error = "Can't bid lower than $neededValue";
+        //kiek reikia pastatyt, kad butu valid bidas
+        $minBidNeeded = $currentMaxBid + $fittingValues['minimumDifference'];
+
+        if ($bid_amount < $minBidNeeded) {
+            $error = "Can't bid lower than $minBidNeeded";
             return response()->json($error);
         }else{
             $success = $this->BiddingService->bid($bid_amount, $item_id, $user_id);

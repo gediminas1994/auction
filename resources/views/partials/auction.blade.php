@@ -279,12 +279,13 @@
             type: "POST",
             url: "/bids/submitBid",
             data: variables,
-            success: function () {
-                notifySuccess();
-            },
-            error: function () {
-                notifyError();
-//                toastr.danger('bad bid');
+            success: function (response) {
+//                notifySuccess();
+                if( response == true ){
+                    toastr.success('Succesfully submitted the bid!');
+                }else{
+                    toastr.error(response);
+                }
             }
         });
 
@@ -292,24 +293,12 @@
         return false;
     }
     @endif
-    // Handle the success callback
+    /*// Handle the success callback
     function notifySuccess() {
         console.log('notification submitted');
-    }
-    function notifyError() {
-        console.log('error');
-    }
+    }*/
 
     $(notifyInit); // Existing functionality
-
-    // Use toastr to show the notification
-    function showNotification(data) {
-
-        // TODO: get the text from the event data
-
-        // TODO: use the text in the notification
-        toastr.success(text, null, {"positionClass": "toast-bottom-left"});
-    }
 
     let pusher = new Pusher('{{ env("PUSHER_APP_KEY") }}', {
         cluster: "eu"
@@ -321,8 +310,6 @@
 
     let channel = pusher.subscribe('auction');
     channel.bind('bid', function(data) {
-        toastr.info(data.amount);
-        //$('#currentBid').append('<li><strong>New bid ' + data.amount + ' by ' + data.username + '</strong></li>');
         $('#currentBid').text(data.amount + ' submitted by ' + data.username);
     });
 
