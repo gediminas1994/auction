@@ -16,7 +16,6 @@
                             <th>Item Title</th>
                             <th>Picture</th>
                             <th>Show</th>
-                            <th>Edit</th>
                             <th>Delete</th>
                             <th>Status</th>
                         </tr>
@@ -26,10 +25,13 @@
                             <tr>
                                 <td>{{ $item->title }}</td>
                                 <td><img style="max-width: 100px; max-height: 80px" src="/{{ $item->picture }}"></td>
-                                <td>Show</td>
-                                <td>Edit</td>
-                                <td>Delete</td>
-                                <td>BLOCKED/UNBLOCKED</td>
+                                <td><a href="{{ route('items.show', $item->id) }}" class="btn btn-primary">Show</a></td>
+                                <td><a class="btn btn-danger" onclick="destroyItem({{ json_encode(route('items.destroy', $item)) }})">Delete</a></td>
+                                @if($item->blocked)
+                                    <td><a class="btn btn-success" onclick="block_unblockItem({{json_encode(route('admin.items.block_unblock', $item))}})">Unblock</a></td>
+                                @else
+                                    <td><a class="btn btn-danger" onclick="block_unblockItem({{json_encode(route('admin.items.block_unblock', $item))}})">Block</a></td>
+                                @endif
                             </tr>
                         @endforeach
                         </tbody>
@@ -37,6 +39,37 @@
                 </div>
             </div>
         </div>
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                {{ $items->links() }}
+            </div>
+        </div>
     </div>
 
+
+    <script>
+        function destroyItem(url) {
+            $.ajax({
+                url: url,
+                method: 'DELETE',
+                data: {
+                    _token: {!! json_encode(csrf_token()) !!}
+                }
+            }).always(function () {
+                location.reload();
+            });
+        }
+
+        function block_unblockItem(url) {
+            $.ajax({
+                url: url,
+                method: 'POST',
+                data: {
+                    _token: {!! json_encode(csrf_token()) !!}
+                }
+            }).always(function () {
+                location.reload();
+            });
+        }
+    </script>
 @endsection

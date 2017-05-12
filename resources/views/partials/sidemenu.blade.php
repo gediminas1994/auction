@@ -8,7 +8,7 @@
                 <div class="list-group">
                     @foreach($subcategories->where('parent_id', $category->id) as $subcategory)
                         <a href="{{ route('search.category', $subcategory) }}" data-value="{{ $subcategory->id }}" class="list-group-item">{{ $subcategory->title }}</a>
-                    @endforeach()
+                    @endforeach
                 </div>
             </div>
         @endforeach

@@ -58,7 +58,6 @@
                             @else
                                 No bids have been made yet
                             @endif
-                           {{-- {{ (!is_null($item->bids)) ? $item->bids()->max('amount') . ' submitted by ' . $item->bids()->where('amount', $item->bids()->max('amount'))->first()->username : 'No bids have been made yet' }}--}}
                         </span>
                     </h3>
                 </div>
@@ -91,7 +90,15 @@
 
     <div class="row">
         <div class="col-md-12">
-            <div class="text-center" id="clockdiv" style="font-size: 35px;">Expires at: {{ $item->expirationDate }}</div>
+            <div class="text-center" id="clockdiv" style="font-size: 35px;">
+                <div class="bg-info">
+                    <span>Auction closes in: </span>
+                    <span class="days" style="color: #4815EF"></span><span> Days</span>
+                    <span class="hours" style="color: #4815EF"></span><span> Hours</span>
+                    <span class="minutes" style="color: #4815EF"></span><span> Minutes</span>
+                    <span class="seconds" style="color: #4815EF"></span><span> Seconds</span>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -207,21 +214,23 @@
         }).always(function () {
             location.reload();
         }).success(function () {
-            alert('success!');
+            alert(response);
         }).error(function () {
             alert(response);
         });
     }
+</script>
 
-    @if($item->type == 0)
+<script>
+    window.onload = function() {
         let end_date = '{{ $item->expirationDate }}';
 
-        function getTimeRemaining(endtime){
+        function getTimeRemaining(endtime) {
             let t = Date.parse(endtime) - Date.parse(new Date());
-            let seconds = Math.floor( (t/1000) % 60 );
-            let minutes = Math.floor( (t/1000/60) % 60 );
-            let hours = Math.floor( (t/(1000*60*60)) % 24 );
-            let days = Math.floor( t/(1000*60*60*24) );
+            let seconds = Math.floor((t / 1000) % 60);
+            let minutes = Math.floor((t / 1000 / 60) % 60);
+            let hours = Math.floor((t / (1000 * 60 * 60)) % 24);
+            let days = Math.floor(t / (1000 * 60 * 60 * 24));
             return {
                 'total': t,
                 'days': days,
@@ -231,22 +240,34 @@
             };
         }
 
-        function initializeClock(id, endtime){
+        function initializeClock(id, endtime) {
+            console.log('initialized');
             let clock = document.getElementById(id);
-            let timeinterval = setInterval(function(){
+            let daysSpan = clock.querySelector('.days');
+            let hoursSpan = clock.querySelector('.hours');
+            let minutesSpan = clock.querySelector('.minutes');
+            let secondsSpan = clock.querySelector('.seconds');
+
+            function updateClock() {
                 let t = getTimeRemaining(endtime);
-                clock.innerHTML = 'days: ' + t.days + '<br>' +
-                    'hours: '+ t.hours + '<br>' +
-                    'minutes: ' + t.minutes + '<br>' +
-                    'seconds: ' + t.seconds;
-                if(t.total<=0){
+
+                daysSpan.innerHTML = t.days;
+                hoursSpan.innerHTML = t.hours;
+                minutesSpan.innerHTML = t.minutes;
+                secondsSpan.innerHTML = t.seconds;
+
+                if (t.total <= 0) {
+                    console.log('time is up');
                     clearInterval(timeinterval);
                 }
-            },1000);
+            }
+
+            updateClock(); // run function once at first to avoid delay
+            let timeinterval = setInterval(updateClock, 1000);
         }
 
         initializeClock('clockdiv', end_date);
-    @endif
+    }
 </script>
 
 <script>
@@ -269,7 +290,7 @@
         });
 
         // Build POST data and make AJAX request
-        let variables = {
+        let letiables = {
             bid_amount: bidAmount,
             item_id: itemID,
             user_id: userID
@@ -278,7 +299,7 @@
         $.ajax({
             type: "POST",
             url: "/bids/submitBid",
-            data: variables,
+            data: letiables,
             success: function (response) {
 //                notifySuccess();
                 if( response == true ){

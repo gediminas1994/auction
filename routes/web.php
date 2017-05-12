@@ -44,6 +44,13 @@ Route::group(['prefix' => 'admin', 'namespace' => 'admin', 'middleware' => 'auth
 
     Route::group(['prefix' => 'items'], function () {
         Route::get('/', ['as' => 'admin.items.index', 'uses' => 'ItemController@index']);
+        Route::post('/{item}', ['as' => 'admin.items.block_unblock', 'uses' => 'ItemController@block_unblock']);
+    });
+
+    Route::group(['prefix' => 'categories'], function () {
+        Route::get('/', ['as' => 'admin.categories.index', 'uses' => 'CategoryController@index']);
+        Route::post('/', ['as' => 'admin.categories.store', 'uses' => 'CategoryController@store']);
+        Route::delete('/{category}', ['as' => 'admin.categories.destroy', 'uses' => 'CategoryController@destroy']);
     });
 });
 
