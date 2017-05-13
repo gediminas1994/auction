@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Scout\Searchable;
 
@@ -26,7 +27,6 @@ class Product extends Model
     public function user(){
         return $this->belongsTo(User::class);
     }
-
 
     public function categories(){
         return $this->belongsToMany(Category::class);
@@ -90,5 +90,33 @@ class Product extends Model
         // Customize array...
 
         return $array;
+    }
+
+    public function hasAuctionTimeEnded(){
+        $hasEnded = Carbon::parse($this->expirationDate, 'Europe/Riga')->lte(Carbon::now('Europe/Riga'));
+        if($hasEnded){
+            $this->saveWinner();
+        }
+        return $hasEnded;
+    }
+
+    public function getWinnerInfo($id){
+        $win = Auction_Winner::where('item_id', $id)->first();
+        return $win;
+    }
+
+    private function saveWinner(){
+        $highestAmount = $this->bids()->max('amount');
+        $highestBidder = $this->bids()->where('amount', $this->bids()->max('amount'))->first();
+
+        if(Auction_Winner::where('item_id', $this->id)->first()){
+            $winner = Auction_Winner::where('item_id', $this->id)->first();
+        }else{
+            $winner = new Auction_Winner();
+        }
+        $winner->item_id = $this->id;
+        $winner->user_id = $highestBidder->id;
+        $winner->amount = $highestAmount;
+        $winner->save();
     }
 }

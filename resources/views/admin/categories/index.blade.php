@@ -8,9 +8,17 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">
+                <a class="btn btn-info" href="{{ url('/home') }}">Back</a>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="row">
+            <div class="col-md-12">
                 <div class="row">
                     <div class="col-md-12">
-                        <button class="btn btn-info btn-md" data-toggle="modal" data-target="#categoryModal"> + Add new category</button>
+                        <button class="btn btn-primary btn-md" data-toggle="modal" data-target="#categoryModal"> + Add new category</button>
                     </div>
                 </div>
 
@@ -22,12 +30,12 @@
                             @foreach($categories as $category)
                                 <li style="font-size: 25px">
                                     <a href="{{ route('search.category', $category) }}" data-value="{{ $category->id }}">{{ $category->title }}</a>
-                                    <a onclick="destroycategory({{ json_encode(route('admin.categories.destroy', $category)) }})" class="btn btn-danger btn-xs"> Delete</a>
+                                    <a onclick="destroyCategory({{ json_encode(route('admin.categories.destroy', $category)) }})" class="btn btn-danger btn-xs"> Delete</a>
                                     <button id="addSubcategory" class="btn btn-success btn-xs" data-toggle="modal" data-target="#subcategoryModal" onclick="getValue(this.value)" value="{{ $category->id }}"> + Add new subcategory</button>
                                 </li>
                                 @foreach($subcategories->where('parent_id', $category->id) as $subcategory)
                                     <li style="margin-left: 35px; font-size: 18px">
-                                        <a href="{{ route('search.category', $subcategory) }}" data-value="{{ $subcategory->id }}">{{ $subcategory->title }}</a>                                          <a onclick="destroycategory({{ json_encode(route('admin.categories.destroy', $subcategory)) }})" class="btn btn-danger btn-xs"> Delete</a>
+                                        <a href="{{ route('search.category', $subcategory) }}" data-value="{{ $subcategory->id }}">{{ $subcategory->title }}</a>                                          <a onclick="destroyCategory({{ json_encode(route('admin.categories.destroy', $subcategory)) }})" class="btn btn-danger btn-xs"> Delete</a>
                                     </li>
                                 @endforeach
                             @endforeach
@@ -95,7 +103,7 @@
             element.value = category_id;
         }
 
-        function destroycategory(url) {
+        function destroyCategory(url) {
             $.ajax({
                 url: url,
                 method: 'DELETE',

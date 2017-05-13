@@ -37,7 +37,7 @@
                     <span>Categories:</span>
                     <span>
                         @foreach($item->categories as $category)
-                            <span><a href="#" class="label label-primary">{{ $category->title }}</a></span>
+                            <span><a href="{{ route('search.category', $category) }}" class="label label-primary" data-value="{{ $category->id }}">{{ $category->title }}</a></span>
                         @endforeach
                     </span>
                 </div>
@@ -49,34 +49,62 @@
                 </div>
             </div><!-- end row -->
 
-            <div class="row add-to-cart">
-                <div class="col-sm-12 product-qty">
-                    <h3>Current highest bid:
-                        <span id="currentBid" style="color: green">
-                            @if(count($item->bids))
-                                {{ $item->bids()->max('amount') . ' submitted by ' . $item->bids()->where('amount', $item->bids()->max('amount'))->first()->username }}
-                            @else
-                                No bids have been made yet
-                            @endif
-                        </span>
-                    </h3>
-                </div>
-                @if(Auth::user())
-                    @if(Auth::user()->isUsersProduct($item->id))
-                        <div class="col-md-8">
-                            <div class="alert alert-info">You can't bid on your own item!</div>
+            <div class="bidding">
+                @if($item->hasAuctionTimeEnded())
+                    <div class="row">
+                        <div class="col-sm-12" style="font-size: 25px">
+                           <div>
+                               <div><strong>This auction has been won!</strong></div>
+                            </div>
                         </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-md-12" style="font-size: 25px">
+                            <div>
+                                <div><strong>Winner</strong></div>
+                                <div style="color: green">{{ \App\User::find($item->getWinnerInfo($item->id)->user_id)->username }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-md-12" style="font-size: 25px">
+                            <div>
+                                <div><strong>With a bid of</strong></div>
+                                <div style="color: green">{{ $item->getWinnerInfo($item->id)->amount }}</div>
+                            </div>
+                        </div>
+                    </div>
+                @else
+                    <div class="col-sm-12 product-qty">
+                        <h3>Current highest bid:
+                            <span id="currentBid" style="color: green">
+                                @if(count($item->bids))
+                                    {{ $item->bids()->max('amount') . ' submitted by ' . $item->bids()->where('amount', $item->bids()->max('amount'))->first()->username }}
+                                @else
+                                    No bids have been made yet
+                                @endif
+                            </span>
+                        </h3>
+                    </div>
+                    @if(Auth::user())
+                        @if(Auth::user()->isUsersProduct($item->id))
+                            <div class="col-md-8">
+                                <div class="alert alert-info">You can't bid on your own item!</div>
+                            </div>
+                        @else
+                            <div class="col-md-8">
+                                <input class="form-control" type="number" id="bid_amount" name="bid_amount" placeholder="Enter Bid" required />
+                                <br>
+                                <button id="submitButton" class="btn btn-success btn-sm">Place your bid</button>
+                            </div>
+                        @endif
                     @else
                         <div class="col-md-8">
-                            <input class="form-control" type="number" id="bid_amount" name="bid_amount" placeholder="Enter Bid" required />
-                            <br>
-                            <button id="submitButton" class="btn btn-success btn-sm">Place your bid</button>
+                            <div class="alert alert-danger">You have to be logged in to bid!</div>
                         </div>
                     @endif
-                @else
-                    <div class="col-md-8">
-                        <div class="alert alert-danger">You have to be logged in to bid!</div>
-                    </div>
                 @endif
             </div><!-- end row -->
 
@@ -92,11 +120,15 @@
         <div class="col-md-12">
             <div class="text-center" id="clockdiv" style="font-size: 35px;">
                 <div class="bg-info">
-                    <span>Auction closes in: </span>
-                    <span class="days" style="color: #4815EF"></span><span> Days</span>
-                    <span class="hours" style="color: #4815EF"></span><span> Hours</span>
-                    <span class="minutes" style="color: #4815EF"></span><span> Minutes</span>
-                    <span class="seconds" style="color: #4815EF"></span><span> Seconds</span>
+                    @if(!$item->hasAuctionTimeEnded())
+                        <span>Auction closes in: </span>
+                        <span class="days" style="color: #4815EF"></span><span> Days</span>
+                        <span class="hours" style="color: #4815EF"></span><span> Hours</span>
+                        <span class="minutes" style="color: #4815EF"></span><span> Minutes</span>
+                        <span class="seconds" style="color: #4815EF"></span><span> Seconds</span>
+                    @else
+                        <span>Auction has ended</span>
+                    @endif
                 </div>
             </div>
         </div>
@@ -194,6 +226,10 @@
                     comments
                 </div>
             </div>
+
+            <div class="row">
+                <div class="col-md-12" style="height: 200px;"></div>
+            </div>
         </div>
     </div>
 
@@ -256,10 +292,11 @@
                 minutesSpan.innerHTML = t.minutes;
                 secondsSpan.innerHTML = t.seconds;
 
-                if (t.total <= 0) {
-                    console.log('time is up');
-                    clearInterval(timeinterval);
-                }
+                @if(!$item->hasAuctionTimeEnded())
+                    if (t.total <= 0) {
+                        window.location.reload();
+                    }
+                @endif
             }
 
             updateClock(); // run function once at first to avoid delay

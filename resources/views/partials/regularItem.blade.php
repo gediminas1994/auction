@@ -34,10 +34,10 @@
                 <div class="col-sm-12">
                     <span>Categories:</span>
                     <span>
-                                @foreach($item->categories as $category)
-                            <span><a href="#" class="label label-primary">{{ $category->title }}</a></span>
+                        @foreach($item->categories as $category)
+                            <span><a href="{{ route('search.category', $category) }}" class="label label-primary" data-value="{{ $category->id }}">{{ $category->title }}</a></span>
                         @endforeach
-                            </span>
+                    </span>
                 </div>
             </div>
 

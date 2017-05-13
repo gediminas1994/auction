@@ -7,6 +7,8 @@
 
                 <a class="btn btn-info" href="{{ url('/home') }}">Back</a>
 
+                <hr>
+
                 <div class="panel panel-default">
 
                     <table class="table">

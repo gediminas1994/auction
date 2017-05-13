@@ -7,6 +7,7 @@
             <div class="col-md-8 col-md-offset-2">
 
                 <a class="btn btn-info" href="{{ url('/home') }}">Back</a>
+                <hr>
 
                 <div class="panel panel-default">
 
