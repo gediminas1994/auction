@@ -3,7 +3,7 @@
 @section('content')
 
 
-<div class="container">
+<div class="container-fluid">
 	<form enctype="multipart/form-data" action="{{ route('items.store') }}" id="createItem" class="form-horizontal" method="POST" >
 		{{csrf_field()}}
 

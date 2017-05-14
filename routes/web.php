@@ -57,7 +57,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'admin', 'middleware' => 'auth
 Route::group(['prefix' => 'user', 'namespace' => 'user', 'middleware' => 'auth'], function () {
     //user info
     Route::get('/{user}', ['as' => 'user.show', 'uses' => 'UsersController@show']);
-    Route::get('/{user}/edit', ['as' => 'user.edit', 'uses' => 'UsersController@show']);
+    Route::get('/{user}/edit', ['as' => 'user.edit', 'uses' => 'UsersController@edit']);
     Route::patch('/{user}', ['as' => 'user.update', 'uses' => 'UsersController@update']);
 
     //user bank Accounts

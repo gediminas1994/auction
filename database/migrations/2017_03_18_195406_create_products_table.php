@@ -27,6 +27,7 @@ class CreateProductsTable extends Migration
             $table->string('picture');
             $table->integer('mailingService_id');
             $table->tinyInteger('blocked')->default(0);
+            $table->integer('status')->nullable();
             $table->timestamps();
         });
     }

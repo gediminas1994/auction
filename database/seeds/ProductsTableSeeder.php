@@ -23,13 +23,14 @@ class ProductsTableSeeder extends Seeder
                     'title' => $faker->text(15),
                     'type' => $type,
                     'description' => $faker->text(200),
-                    'expirationDate' => $faker->dateTimeBetween($date, $date->addWeek()),
+                    'expirationDate' => $faker->dateTimeBetween($date, $date->addHours(24)),
                     'startingBid' => $faker->randomFloat(2, 0.50, 250),
                     'mailingService_id' => rand(1,5),
                     //JEIGU ANT LAPTOPO
 //                    'picture' => substr($faker->image($dir = public_path(). '/products/'), 22),
                     //JEIGU ANT STALINIO
                     'picture' => substr($faker->image($dir = public_path(). '/products/'), 38),
+                    'status' => 1,
                     'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                     'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 ]);

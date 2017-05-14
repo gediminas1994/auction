@@ -51,31 +51,57 @@
 
             <div class="bidding">
                 @if($item->hasAuctionTimeEnded())
-                    <div class="row">
-                        <div class="col-sm-12" style="font-size: 25px">
-                           <div>
-                               <div><strong>This auction has been won!</strong></div>
+                    @if(Auth::user()->id == $item->getWinnerInfo($item->id)->user_id)
+                        <div class="row">
+                            <div class="col-sm-12" style="font-size: 25px">
+                                <div>
+                                    <div><strong style="color: #66CDAA; font-size: 40px">You have won this auction!</strong></div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <br>
-                    <div class="row">
-                        <div class="col-md-12" style="font-size: 25px">
-                            <div>
-                                <div><strong>Winner</strong></div>
-                                <div style="color: green">{{ \App\User::find($item->getWinnerInfo($item->id)->user_id)->username }}</div>
+                        <br>
+                        <div class="row">
+                            <div class="col-md-12" style="font-size: 25px">
+                                <div>
+                                    <div><strong>Click the button bellow to pay for your item!</strong></div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <br>
-                    <div class="row">
-                        <div class="col-md-12" style="font-size: 25px">
-                            <div>
-                                <div><strong>With a bid of</strong></div>
-                                <div style="color: green">{{ $item->getWinnerInfo($item->id)->amount }}</div>
+                        <br>
+                        <div class="row">
+                            <div class="col-md-12" style="font-size: 25px">
+                                <div>
+                                    <div><button class="btn btn-success">GET IT</button></div>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    @else
+                        <div class="row">
+                            <div class="col-sm-12" style="font-size: 25px">
+                                <div>
+                                    <div><strong>This auction has been won!</strong></div>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="col-md-12" style="font-size: 25px">
+                                <div>
+                                    <div><strong>Winner</strong></div>
+                                    <div style="color: green">{{ \App\User::find($item->getWinnerInfo($item->id)->user_id)->username }}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="col-md-12" style="font-size: 25px">
+                                <div>
+                                    <div><strong>With a bid of</strong></div>
+                                    <div style="color: green">{{ $item->getWinnerInfo($item->id)->amount }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
                 @else
                     <div class="col-sm-12 product-qty">
                         <h3>Current highest bid:

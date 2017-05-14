@@ -45,7 +45,8 @@ class Product extends Model
             'expirationDate' => $expirationDate,
             'startingBid' => $startingBid,
             'mailingService_id' => $mailingServiceId,
-            'picture' => $picturePath
+            'picture' => $picturePath,
+            'status' => 1
         ]);
 
         $item->save();
@@ -74,22 +75,6 @@ class Product extends Model
             $category_id = intval($submittedCategory);
             $item->categories()->attach($category_id);
         }
-    }
-
-    //Algolia function 1
-    public function searchableAs()
-    {
-        return 'title';
-    }
-
-    //Algolia function 2
-    public function toSearchableArray()
-    {
-        $array = $this->toArray();
-
-        // Customize array...
-
-        return $array;
     }
 
     public function hasAuctionTimeEnded(){
