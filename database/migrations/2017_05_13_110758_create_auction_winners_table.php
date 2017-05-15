@@ -18,6 +18,7 @@ class CreateAuctionWinnersTable extends Migration
             $table->integer('item_id');
             $table->integer('user_id');
             $table->float('amount');
+            $table->tinyInteger('hasPaid')->default(0);
             $table->timestamps();
         });
     }

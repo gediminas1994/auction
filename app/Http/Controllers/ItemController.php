@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Auction_Winner;
 use App\Category;
 use App\Favorite;
 use App\Product;
 use App\Mailing_Service;
 use App\Tag;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -61,7 +63,7 @@ class ItemController extends Controller
         $user_id = Auth::user()->id;
         $title = Input::get('title');
         $description = Input::get('description');
-        $mailingServiceId = Input::get('mailing_services');
+        $submittedMailingServices = Input::get('mailing_services');
         $submittedCategories = Input::get('categories');
         if(Input::hasFile('picture')){
             $picture = Input::file('picture');
@@ -74,11 +76,11 @@ class ItemController extends Controller
         if($type == 0){
             $expirationDate = Input::get('expirationDate');
             $startingBid = Input::get('startingBid');
-            $item->createAuction($user_id, $title, $type, $description, $expirationDate,$startingBid, $mailingServiceId, $picturePath, $submittedCategories);
+            $item->createAuction($user_id, $title, $type, $description, $expirationDate,$startingBid, $submittedMailingServices, $picturePath, $submittedCategories);
         }else{
             $quantity = Input::get('quantity');
             $price = Input::get('price');
-            $item->createRegularItem($user_id, $title, $type, $description, $quantity, $price, $mailingServiceId, $picturePath, $submittedCategories);
+            $item->createRegularItem($user_id, $title, $type, $description, $quantity, $price, $submittedMailingServices, $picturePath, $submittedCategories);
         }
 
         Session::flash('message','Product was created succesfully!');
@@ -182,5 +184,25 @@ class ItemController extends Controller
         }
 
         return view('items.index')->with('items', $items);
+    }
+
+    public function extendExpirationDate(Request $request, $id){
+        $item = Product::find($id);
+        $newDate = Carbon::parse($request->get('expirationDate'), 'Europe/Riga');
+
+        $item->expirationDate = $newDate;
+        $item->save();
+
+        Session::flash('message', 'Successfully extended auction time!');
+        return back();
+    }
+
+    public function payForWonAuction(Request $request, $id){
+        $win = Auction_Winner::where('item_id', $id)->first();
+        $win->hasPaid = 1;
+        $win->save();
+
+        Session::flash('message', 'Successfully paid for the product!');
+        return back();
     }
 }

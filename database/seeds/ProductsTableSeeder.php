@@ -25,7 +25,6 @@ class ProductsTableSeeder extends Seeder
                     'description' => $faker->text(200),
                     'expirationDate' => $faker->dateTimeBetween($date, $date->addHours(24)),
                     'startingBid' => $faker->randomFloat(2, 0.50, 250),
-                    'mailingService_id' => rand(1,5),
                     //JEIGU ANT LAPTOPO
 //                    'picture' => substr($faker->image($dir = public_path(). '/products/'), 22),
                     //JEIGU ANT STALINIO
@@ -42,7 +41,6 @@ class ProductsTableSeeder extends Seeder
                     'description' => $faker->text(200),
                     'quantity' => rand(1,25),
                     'price' => $faker->randomFloat(2,0.50,250),
-                    'mailingService_id' => rand(1,5),
                     //JEIGU ANT LAPTOPO
 //                    'picture' => substr($faker->image($dir = public_path(). '/products/'), 22),
                     //JEIGU ANT STALINIO

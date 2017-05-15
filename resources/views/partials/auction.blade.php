@@ -1,6 +1,9 @@
 <link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet"/>
 
 <div class="container-fluid">
+
+    @include('partials.messages')
+
     <div class="row">
         <div class="col-md-11">
             <i class="fa fa-gavel fa-3x" aria-hidden="true"></i>
@@ -51,56 +54,222 @@
 
             <div class="bidding">
                 @if($item->hasAuctionTimeEnded())
-                    @if(Auth::user()->id == $item->getWinnerInfo($item->id)->user_id)
-                        <div class="row">
-                            <div class="col-sm-12" style="font-size: 25px">
-                                <div>
-                                    <div><strong style="color: #66CDAA; font-size: 40px">You have won this auction!</strong></div>
+                    @if($item->didSomeoneBid())
+                        @if(Auth::user()->id == $item->getWinnerInfo($item->id)->user_id)
+                            <div class="row">
+                                <div class="col-sm-12" style="font-size: 25px">
+                                    <div>
+                                        <div><strong style="color: #66CDAA; font-size: 40px">You have won this auction!</strong></div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <br>
-                        <div class="row">
-                            <div class="col-md-12" style="font-size: 25px">
-                                <div>
-                                    <div><strong>Click the button bellow to pay for your item!</strong></div>
+                            <br>
+
+                            @if($item->hasAuctionBeenPayed($item->id))
+                                <div class="row">
+                                    <div class="col-md-12" style="font-size: 25px">
+                                        <div>
+                                            <div><strong style="color: #66CDAA">You have successfully paid for this product!</strong></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @else
+                                <div class="row">
+                                    <div class="col-md-12" style="font-size: 25px">
+                                        <div>
+                                            <div><strong>Click the button bellow to pay for your item!</strong></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="row">
+                                    <div class="col-md-12" style="font-size: 25px">
+                                        <div>
+                                            <div><button class="btn btn-success" data-toggle="modal" data-target="#paymentModal">GET IT</button></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
+
+                            <!-- Payment Modal -->
+                            <div class="modal fade" id="paymentModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h2 class="modal-title" id="exampleModalLongTitle">Auction payment confirmation</h2>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form enctype="multipart/form-data" action="{{ route('items.payForWonAuction', $item) }}" id="createItem" class="form-horizontal" method="POST" >
+                                                {{csrf_field()}}
+
+                                                <div class="row">
+                                                    <div class="col-sm-12 text-center" style="font-size: 25px">
+                                                        Auction author's available mailing methods
+                                                    </div>
+                                                </div>
+                                                @foreach($item->mailing_services as $mailing_service)
+                                                    <div class="radio text-center">
+                                                        <label>
+                                                            <input type="radio" name="mailingPick" value="{{ $mailing_service->id }}">
+                                                            <span>
+                                                                Mailing Service<strong> {{ $mailing_service->title }}</strong>
+                                                            </span>
+                                                        </label>
+                                                    </div>
+                                                @endforeach
+                                                <div class="row">
+                                                    <div class="col-sm-12 text-center" style="font-size: 25px">
+                                                        Auction author's available bank accounts
+                                                    </div>
+                                                </div>
+                                                @foreach($item->user->bankAccount as $bankAccount)
+                                                    <div class="radio text-center">
+                                                        <label>
+                                                            <input type="radio" name="bankPick" value="{{ $bankAccount->id }}">
+                                                            <span>
+                                                                Bank name:<strong> {{ $bankAccount->bank_name }}</strong>
+                                                                Bank account number:<strong> {{ $bankAccount->bank_account }}</strong>
+                                                            </span>
+                                                        </label>
+                                                    </div>
+                                                @endforeach
+
+                                                <div class="row">
+                                                    <div class="col-sm-4 col-sm-offset-4 text-center" style="font-size: 23px">
+                                                        You have to pay
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-4 col-sm-offset-4 text-center" style="font-size: 30px; color: green;">
+                                                        {{ $item->getWinnerInfo($item->id)->amount }}€
+                                                    </div>
+                                                </div>
+                                                <br>
+                                                <div class="row">
+                                                    <div class="col-sm-12 text-center">
+                                                        <button type="submit" class="btn btn-success">Submit payment</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <br>
-                        <div class="row">
-                            <div class="col-md-12" style="font-size: 25px">
-                                <div>
-                                    <div><button class="btn btn-success">GET IT</button></div>
+                        @else
+                            <div class="row">
+                                <div class="col-sm-12" style="font-size: 25px">
+                                    <div>
+                                        <div><strong>This auction has been won!</strong></div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                            <br>
+                            <div class="row">
+                                <div class="col-md-12" style="font-size: 25px">
+                                    <div>
+                                        <div><strong>Winner</strong></div>
+                                        <div style="color: green">{{ \App\User::find($item->getWinnerInfo($item->id)->user_id)->username }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col-md-12" style="font-size: 25px">
+                                    <div>
+                                        <div><strong>With a bid of</strong></div>
+                                        <div style="color: green">{{ $item->getWinnerInfo($item->id)->amount }}</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            @if(Auth::user()->id == $item->user_id)
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        @if($item->hasAuctionBeenPayed($item->id))
+                                            <div class="alert alert-success" role="alert">
+                                                <strong>The winner has paid for the product!</strong>
+                                            </div>
+                                        @else
+                                            <div class="alert alert-warning" role="alert">
+                                                <strong>The winner has not paid yet!</strong>
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div>
+                            @endif
+                        @endif
                     @else
-                        <div class="row">
-                            <div class="col-sm-12" style="font-size: 25px">
-                                <div>
-                                    <div><strong>This auction has been won!</strong></div>
+                        @if(Auth::user()->id == $item->user_id)
+                            <div class="row">
+                                <div class="col-sm-12" style="font-size: 25px">
+                                    <div>
+                                        <div><strong>Your item didin't get any bids!</strong></div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <br>
-                        <div class="row">
-                            <div class="col-md-12" style="font-size: 25px">
-                                <div>
-                                    <div><strong>Winner</strong></div>
-                                    <div style="color: green">{{ \App\User::find($item->getWinnerInfo($item->id)->user_id)->username }}</div>
+                            <div class="row">
+                                <div class="col-sm-12" style="font-size: 25px">
+                                    <div>
+                                        <div>
+                                            <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#exampleModalLong">
+                                                Extend auction time!
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <br>
-                        <div class="row">
-                            <div class="col-md-12" style="font-size: 25px">
-                                <div>
-                                    <div><strong>With a bid of</strong></div>
-                                    <div style="color: green">{{ $item->getWinnerInfo($item->id)->amount }}</div>
+
+                            <!-- Modal -->
+                            <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h3 class="modal-title" id="exampleModalLongTitle">Extend auction time</h3>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+
+                                            <form enctype="multipart/form-data" action="{{ route('items.extendExpirationDate', $item->id) }}" id="createItem" class="form-horizontal" method="POST">
+                                            {{csrf_field()}}
+                                                <div class="form-group auction">
+                                                    <label for="datetimepicker1" class="col-sm-3 control-label">Expiration date</label>
+                                                    <div class="col-sm-9">
+                                                        <div class='input-group date' id='datetimepicker1'>
+                                                            <input type='text' class="form-control" name="expirationDate"/>
+                                                            <span class="input-group-addon">
+                                                                <span class="glyphicon glyphicon-calendar"></span>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="col-sm-offset-3 col-sm-6">
+                                                        <button type="submit" class="btn btn-default">Submit</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        @else
+                            <div class="row">
+                                <div class="col-sm-12" style="font-size: 25px">
+                                    <div>
+                                        <div><strong>Nobody has bid on this auction! :(</strong></div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
                     @endif
                 @else
                     <div class="col-sm-12 product-qty">
@@ -167,63 +336,37 @@
             <!-- Nav tabs -->
             <ul class="nav nav-tabs" role="tablist">
                 <li class="active">
-                    <a href="#description"
-                       aria-controls="description"
-                       role="tab"
-                       data-toggle="tab"
-                    >Description</a>
+                    <a href="#description" data-toggle="tab">Description</a>
                 </li>
                 <li>
-                    <a href="#mailing_services"
-                       aria-controls="mailing_services"
-                       role="tab"
-                       data-toggle="tab"
-                    >Mailing Services</a>
+                    <a href="#mailing" data-toggle="tab">Mailing Services</a>
                 </li>
                 <li>
-                    <a href="#user_rating"
-                       aria-controls="user_rating"
-                       role="tab"
-                       data-toggle="tab"
-                    >User Rating</a>
+                    <a href="#rating" data-toggle="tab">User Rating</a>
                 </li>
                 <li>
-                    <a href="#comments"
-                       aria-controls="comments"
-                       role="tab"
-                       data-toggle="tab"
-                    >Comments</a>
+                    <a href="#comments" data-toggle="tab">Comments</a>
                 </li>
             </ul>
 
             <!-- Tab panes -->
             <div class="tab-content">
-                <div role="tabpanel" class="tab-pane active" id="description">
-                    {{ $item->description }}
+                <div class="tab-pane active" id="description">
+                    <div>{{ $item->description }}</div>
                 </div>
-                <div role="tabpanel" class="tab-pane top-10" id="mailing_services">
-                    @if($item->mailingService_id == 1)
-                        Lietuvos paštas
-                    @elseif($item->mailingService_id == 2)
-                        Omniva
-                    @elseif($item->mailingService_id == 3)
-                        LP Express
-                    @elseif($item->mailingService_id == 4)
-                        DPD Kurjeris
-                    @else
-                        Autobusų stotis
-                    @endif
+                <div class="tab-pane" id="mailing">
+                    <ul>
+                        @foreach($item->mailing_services as $mailing_service)
+                            <li>{{ $mailing_service->title }}</li>
+                        @endforeach
+                    </ul>
                 </div>
-                <div role="tabpanel" class="tab-pane" id="user_rating">
-                    @if($item->user->rating)
-                        <span>This Users Rating is: </span>
-                        <span>{{ number_format($item->user->rating->total_rating/$item->user->rating->times_rated, 2) }}<b>/5</b></span>
-                    @else
-                        <div>This user has not been rated yet!</div>
-                    @endif
+                <div class="tab-pane" id="rating">
 
-                    <br>
-                    <div>Give this user a rating!</div>
+                    {{--@if(isset($item->user->ratings))
+
+                    @endif--}}
+
 
                     <form enctype="multipart/form-data" action="{{ route('rating.submit', $item->user->id) }}" id="createItem" class="form-horizontal" method="POST" >
                         {{csrf_field()}}
@@ -238,17 +381,14 @@
                                     <option value="5">5</option>
                                 </select>
                             </div>
-
                             <div class="col-md-4">
                                 <button type="submit" class="btn btn-success">Submit</button>
                             </div>
                         </div>
-
-
                     </form>
 
                 </div>
-                <div role="tabpanel" class="tab-pane" id="comments">
+                <div class="tab-pane" id="comments">
                     comments
                 </div>
             </div>

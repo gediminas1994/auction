@@ -19,7 +19,6 @@ class Product extends Model
         'quantity',
         'price',
         'startingBid',
-        'mailingService_id',
         'picture'
     ];
 
@@ -32,11 +31,15 @@ class Product extends Model
         return $this->belongsToMany(Category::class);
     }
 
+    public function mailing_services(){
+        return $this->belongsToMany(Mailing_Service::class, 'product_mailings', 'product_id', 'mailing_service_id');
+    }
+
     public function bids(){
         return $this->belongsToMany(User::class, 'bids', 'product_id', 'user_id')->withPivot('amount');
     }
 
-    public function createAuction($user_id, $title, $type, $description, $expirationDate,$startingBid, $mailingServiceId, $picturePath, $submittedCategories){
+    public function createAuction($user_id, $title, $type, $description, $expirationDate,$startingBid, $submittedMailingServices, $picturePath, $submittedCategories){
         $item = Product::fill([
             'user_id' => $user_id,
             'title' => $title,
@@ -44,12 +47,16 @@ class Product extends Model
             'description' => $description,
             'expirationDate' => $expirationDate,
             'startingBid' => $startingBid,
-            'mailingService_id' => $mailingServiceId,
             'picture' => $picturePath,
             'status' => 1
         ]);
 
         $item->save();
+
+        foreach ($submittedMailingServices as $submittedMailingService){
+            $service_id = intval($submittedMailingService);
+            $item->mailing_services()->attach($service_id);
+        }
 
         foreach ($submittedCategories as $submittedCategory){
             $category_id = intval($submittedCategory);
@@ -57,7 +64,7 @@ class Product extends Model
         }
     }
 
-    public function createRegularItem($user_id, $title, $type, $description, $quantity, $price, $mailingServiceId, $picturePath, $submittedCategories){
+    public function createRegularItem($user_id, $title, $type, $description, $quantity, $price, $submittedMailingServices, $picturePath, $submittedCategories){
         $item = Product::fill([
             'user_id' => $user_id,
             'title' => $title,
@@ -65,11 +72,15 @@ class Product extends Model
             'description' => $description,
             'quantity' => $quantity,
             'price' => $price,
-            'mailingService_id' => $mailingServiceId,
             'picture' => $picturePath
         ]);
 
         $item->save();
+
+        foreach ($submittedMailingServices as $submittedMailingService){
+            $service_id = intval($submittedMailingService);
+            $item->mailing_services()->attach($service_id);
+        }
 
         foreach ($submittedCategories as $submittedCategory){
             $category_id = intval($submittedCategory);
@@ -79,10 +90,16 @@ class Product extends Model
 
     public function hasAuctionTimeEnded(){
         $hasEnded = Carbon::parse($this->expirationDate, 'Europe/Riga')->lte(Carbon::now('Europe/Riga'));
-        if($hasEnded){
-            $this->saveWinner();
-        }
         return $hasEnded;
+    }
+
+    public function didSomeoneBid(){
+        if($this->bids()->max('amount')){
+            $this->saveWinner();
+            return true;
+        }else{
+            return false;
+        }
     }
 
     public function getWinnerInfo($id){
@@ -90,18 +107,31 @@ class Product extends Model
         return $win;
     }
 
+    public function hasAuctionBeenPayed($id){
+        $win = Auction_Winner::where('item_id', $id)->first();
+        if($win->hasPaid == 1){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
     private function saveWinner(){
         $highestAmount = $this->bids()->max('amount');
         $highestBidder = $this->bids()->where('amount', $this->bids()->max('amount'))->first();
 
-        if(Auction_Winner::where('item_id', $this->id)->first()){
-            $winner = Auction_Winner::where('item_id', $this->id)->first();
+        if($highestBidder){
+            if(Auction_Winner::where('item_id', $this->id)->first()){
+                $winner = Auction_Winner::where('item_id', $this->id)->first();
+            }else{
+                $winner = new Auction_Winner();
+            }
+            $winner->item_id = $this->id;
+            $winner->user_id = $highestBidder->id;
+            $winner->amount = $highestAmount;
+            $winner->save();
         }else{
-            $winner = new Auction_Winner();
+            return false;
         }
-        $winner->item_id = $this->id;
-        $winner->user_id = $highestBidder->id;
-        $winner->amount = $highestAmount;
-        $winner->save();
     }
 }

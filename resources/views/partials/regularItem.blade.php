@@ -11,7 +11,10 @@
                         <strong>Product is in your favorite list</strong>
                     </div>
                 @else
-                    <a onclick="addToFavorites({{ json_encode(route('items.addToFavorites', $item->id)) }})" class="btn btn-success btn-lg pull-right" style="cursor: pointer"><i class="fa fa-star" aria-hidden="true"></i> Add To Favorites</a>
+                    <a onclick="addToFavorites({{ json_encode(route('items.addToFavorites', $item->id)) }})"
+                       class="btn btn-success btn-lg pull-right" style="cursor: pointer"><i class="fa fa-star"
+                                                                                            aria-hidden="true"></i> Add
+                        To Favorites</a>
                 @endif
             @endif
         </div>
@@ -20,7 +23,8 @@
     <div class="row">
         <div class="col-sm-6">
             {{--PICTURE--}}
-            <img src="/{{ $item->picture }}" alt="" class="img-responsive" style="margin-top: 25px; border-radius: 3px;">
+            <img src="/{{ $item->picture }}" alt="" class="img-responsive"
+                 style="margin-top: 25px; border-radius: 3px;">
         </div>
         <div class="col-sm-6">
             {{--INFORMATION--}}
@@ -35,7 +39,8 @@
                     <span>Categories:</span>
                     <span>
                         @foreach($item->categories as $category)
-                            <span><a href="{{ route('search.category', $category) }}" class="label label-primary" data-value="{{ $category->id }}">{{ $category->title }}</a></span>
+                            <span><a href="{{ route('search.category', $category) }}" class="label label-primary"
+                                     data-value="{{ $category->id }}">{{ $category->title }}</a></span>
                         @endforeach
                     </span>
                 </div>
@@ -43,7 +48,7 @@
 
             <div class="row">
                 <div class="col-sm-12 bottom-rule">
-                    <h2 class="product-price">$129.00</h2>
+                    <h2 class="product-price">{{ $item->price }}€</h2>
                 </div>
             </div><!-- end row -->
 
@@ -59,7 +64,8 @@
                                 <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
                             </span>
                     <span>
-                                <input type="number" min="1" max="{{ $item->quantity }}" class="btn btn-default btn-sm" value="1"/>
+                                <input type="number" min="1" max="{{ $item->quantity }}" class="btn btn-default btn-sm"
+                                       value="1"/>
                             </span>
                     <span class="btn btn-default btn-sm">
                                 <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
@@ -72,94 +78,80 @@
 
             <br>
 
-            <!-- Nav tabs -->
-            <ul class="nav nav-tabs" role="tablist">
-                <li class="active">
-                    <a href="#description"
-                       aria-controls="description"
-                       role="tab"
-                       data-toggle="tab"
-                    >Description</a>
-                </li>
-                <li>
-                    <a href="#mailing_services"
-                       aria-controls="mailing_services"
-                       role="tab"
-                       data-toggle="tab"
-                    >Mailing Services</a>
-                </li>
-                <li>
-                    <a href="#user_rating"
-                       aria-controls="user_rating"
-                       role="tab"
-                       data-toggle="tab"
-                    >User Rating</a>
-                </li>
-                <li>
-                    <a href="#comments"
-                       aria-controls="comments"
-                       role="tab"
-                       data-toggle="tab"
-                    >Comments</a>
-                </li>
-            </ul>
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li class="active">
+                            <a href="#description" data-toggle="tab">Description</a>
+                        </li>
+                        <li>
+                            <a href="#mailing" data-toggle="tab">Mailing Services</a>
+                        </li>
+                        <li>
+                            <a href="#rating" data-toggle="tab">User Rating</a>
+                        </li>
+                        <li>
+                            <a href="#comments" data-toggle="tab">Comments</a>
+                        </li>
+                    </ul>
 
-            <!-- Tab panes -->
-            <div class="tab-content">
-                <div role="tabpanel" class="tab-pane active" id="description">
-                    {{ $item->description }}
-                </div>
-                <div role="tabpanel" class="tab-pane top-10" id="mailing_services">
-                    @if($item->mailingService_id == 1)
-                        Lietuvos paštas
-                    @elseif($item->mailingService_id == 2)
-                        Omniva
-                    @elseif($item->mailingService_id == 3)
-                        LP Express
-                    @elseif($item->mailingService_id == 4)
-                        DPD Kurjeris
-                    @else
-                        Autobusų stotis
-                    @endif
-                </div>
-                <div role="tabpanel" class="tab-pane" id="user_rating">
-                    @if($item->user->rating)
-                        <span>This Users Rating is: </span>
-                        <span>{{ number_format($item->user->rating->total_rating/$item->user->rating->times_rated, 2) }}<b>/5</b></span>
-                    @else
-                        <div>This user has not been rated yet!</div>
-                    @endif
-
-                    <br>
-                    <div>Give this user a rating!</div>
-
-                    <form enctype="multipart/form-data" action="{{ route('rating.submit', $item->user->id) }}" id="createItem" class="form-horizontal" method="POST" >
-                        {{csrf_field()}}
-
-                        <div class="row">
-                            <div class="col-md-4">
-                                <select class="form-control" name="rating">
-                                    <option value="1">1</option>
-                                    <option value="2">2</option>
-                                    <option value="3">3</option>
-                                    <option value="4">4</option>
-                                    <option value="5">5</option>
-                                </select>
-                            </div>
-
-                            <div class="col-md-4">
-                                <button type="submit" class="btn btn-success">Submit</button>
-                            </div>
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="description">
+                            <div>{{ $item->description }}</div>
                         </div>
+                        <div class="tab-pane" id="mailing">
+                            <ul>
+                                @foreach($item->mailing_services as $mailing_service)
+                                    <li>{{ $mailing_service->title }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                        <div class="tab-pane" id="rating">
+                            @if($item->user->rating)
+                                <span>This Users Rating is: </span>
+                                <span>{{ number_format($item->user->rating->total_rating/$item->user->rating->times_rated, 2) }}
+                                    <b>/5</b></span>
+                            @else
+                                <div>This user has not been rated yet!</div>
+                            @endif
 
+                            <br>
+                            <div>Give this user a rating!</div>
 
-                    </form>
+                            <form enctype="multipart/form-data" action="{{ route('rating.submit', $item->user->id) }}"
+                                  id="createItem" class="form-horizontal" method="POST">
+                                {{csrf_field()}}
 
-                </div>
-                <div role="tabpanel" class="tab-pane" id="comments">
-                    comments
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <select class="form-control" name="rating">
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <button type="submit" class="btn btn-success">Submit</button>
+                                    </div>
+                                </div>
+                            </form>
+
+                        </div>
+                        <div class="tab-pane" id="comments">
+                            comments
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12" style="height: 200px;"></div>
+                    </div>
                 </div>
             </div>
+
         </div>
     </div>
 </div>

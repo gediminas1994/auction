@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container">
+    <div class="container-fluid">
         <form action="{{route('user.bankAccounts.update', ['user' => Auth::user(), 'bankRecord' => $bankRecord])}}" id="bank_form" data-parsley-validate="" class="form-horizontal form-label-left" novalidate="" method="POST">
             <input type="hidden" name="_method" value="PATCH">
             {{csrf_field()}}

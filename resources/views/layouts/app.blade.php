@@ -188,6 +188,9 @@
         $('#categories').selectize({
             maxItems: 3
         });
+        $('#mailing_services').selectize({
+            maxItems: 3
+        });
     </script>
 
     {{--BOOTSTRAP DATETIMEPICKER--}}
@@ -196,7 +199,7 @@
     <script type="text/javascript">
         $(function () {
             $('#datetimepicker1').datetimepicker({
-                format: 'YYYY-MM-DD hh:mm:ss',
+                format: 'YYYY-MM-DD HH:mm:ss',
                 defaultDate: moment(),
                 minDate: moment()-1
             });

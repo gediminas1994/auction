@@ -45,9 +45,9 @@ class User extends Authenticatable
         return $this->belongsToMany(Product::class, 'favorites');
     }
 
-    public function rating()
+    public function ratings()
     {
-        return $this->hasOne(Rating::class);
+        return $this->hasMany(Rating::class);
     }
 
     public function bids(){

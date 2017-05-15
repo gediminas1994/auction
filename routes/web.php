@@ -80,6 +80,14 @@ Route::group(['prefix' => 'items'], function () {
     Route::patch('/{item}', ['as' => 'items.update', 'uses' => 'ItemController@update']);
     Route::delete('/{item}', ['as' => 'items.destroy', 'uses' => 'ItemController@destroy']);
 
+    //Extend auction item expirationDate
+    Route::post('/expire/{item}', ['as' => 'items.extendExpirationDate', 'uses' => 'ItemController@extendExpirationDate']);
+
+    /*GALI BUT, KAD PLIEKSIS VIRSUTINIS ROUTE SU APATINIU*/
+
+    //pay for a won auction
+    Route::post('/{item}', ['as' => 'items.payForWonAuction', 'uses' => 'ItemController@payForWonAuction']);
+
     //users listed items
     Route::get('/user/{user}', ['as' => 'user.listedItems', 'uses' => 'ItemController@listedItems']);
 

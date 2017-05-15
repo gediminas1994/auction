@@ -8,11 +8,9 @@ use function Sodium\increment;
 
 class RatingController extends Controller
 {
-    public function showRating(){
-
-    }
-
     public function submitRating(Request $request, $user_id){
+        //$user_id = tas useris, kuriam dudoa reitinga
+        dd($request->all(), $user_id);
         $rating = Rating::where('user_id', $user_id)->first();
         if(!$rating){
             //pirma karta ratinamas

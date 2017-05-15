@@ -25,7 +25,6 @@ class CreateProductsTable extends Migration
             $table->float('startingBid')->nullable();
             $table->float('price')->nullable();
             $table->string('picture');
-            $table->integer('mailingService_id');
             $table->tinyInteger('blocked')->default(0);
             $table->integer('status')->nullable();
             $table->timestamps();
