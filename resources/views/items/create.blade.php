@@ -86,7 +86,7 @@
 
 
 		<div class="form-group">
-			<label for="mailing_services" class="col-sm-2 control-label">Mailing Service</label>
+			<label for="mailing_services" class="col-sm-2 control-label">Mailing Services</label>
 			<div class="col-sm-8">
 				<select multiple id="mailing_services" name="mailing_services[]" data-placeholder="Select mailing services">
 					@foreach($mailing_services as $mailing_service)

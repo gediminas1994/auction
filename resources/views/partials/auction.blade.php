@@ -493,7 +493,7 @@
         });
 
         // Build POST data and make AJAX request
-        let letiables = {
+        let variables = {
             bid_amount: bidAmount,
             item_id: itemID,
             user_id: userID
@@ -502,7 +502,7 @@
         $.ajax({
             type: "POST",
             url: "/bids/submitBid",
-            data: letiables,
+            data: variables,
             success: function (response) {
 //                notifySuccess();
                 if( response == true ){

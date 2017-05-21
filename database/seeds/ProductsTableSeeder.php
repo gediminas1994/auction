@@ -29,7 +29,7 @@ class ProductsTableSeeder extends Seeder
 //                    'picture' => substr($faker->image($dir = public_path(). '/products/'), 22),
                     //JEIGU ANT STALINIO
                     'picture' => substr($faker->image($dir = public_path(). '/products/'), 38),
-                    'status' => 1,
+                    'status' => 1,  //panaikint is table status columna NEREIKALINGAS
                     'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                     'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 ]);

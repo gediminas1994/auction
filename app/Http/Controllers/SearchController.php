@@ -21,8 +21,7 @@ class SearchController extends Controller
 
     public function category(Category $category){
         if(is_null($category->parent_id)){
-//            KATEGORIJA
-            $items = $category->products;
+            //Tevine kategorija
             $subcategories = Category::where('parent_id', $category->id)->get();
             $items = [];
             foreach($subcategories as $subcategory){
@@ -31,7 +30,7 @@ class SearchController extends Controller
             $items = array_flatten($items);
             $categoryTitle = $category->title;
         }else{
-//            SUBKATEGORIJA
+            //Vaikine kategorija
             $items = $category->products;
             $categoryTitle = $category->title;
         }
