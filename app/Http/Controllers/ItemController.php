@@ -92,6 +92,13 @@ class ItemController extends Controller
     public function show($id)
     {
         $item = Product::where('id', $id)->first();
+        if($item->blocked){
+            if(Auth::user()->id == $item->user_id){
+                return view('items.show')->with('item', $item);
+            }else{
+                return redirect()->route('welcome');
+            }
+        }
         return view('items.show')->with('item', $item);
     }
 
@@ -117,17 +124,6 @@ class ItemController extends Controller
         ]);
 
         $item = Product::find($id);
-        //ROUTE SERVICE PROVIDER
-        /*//public function boot()
-        {
-            //
-
-            parent::boot();
-
-            Route::bind('part_id', function ($value) {
-                return RecarPartModel::findOrFail($value);
-            });
-        }*/
         $item->title = $request->get('product_title');
         $item->description = $request->get('product_description');
         $item->save();
@@ -175,10 +171,12 @@ class ItemController extends Controller
     public function showItemsByType($type){
         if($type == 'auctions'){
             $items = Product::where('type', 0)
+                ->where('blocked', '!=', 1)
                 ->orderBy('created_at', 'desc')
                 ->paginate(9);
         }else{
             $items = Product::where('type', 1)
+                ->where('blocked', '!=', 1)
                 ->orderBy('created_at', 'desc')
                 ->paginate(9);
         }
@@ -204,5 +202,21 @@ class ItemController extends Controller
 
         Session::flash('message', 'Successfully paid for the product!');
         return back();
+    }
+
+    public function buyRegularItem(Request $request, Product $item){
+        $this->validate($request, [
+            'quantityEntered' => 'required'
+        ]);
+
+        if($request->get('quantityEntered') > $item->quantity){
+            return back()->withErrors('The quantity cannot be higher than ' . $item->quantity);
+        }else{
+            $item->quantity = $item->quantity - intval($request->get('quantityEntered'));
+            $item->save();
+
+            Session::flash('message', 'Successfully bought the item!');
+            return back();
+        }
     }
 }

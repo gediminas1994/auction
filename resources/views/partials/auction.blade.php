@@ -3,6 +3,15 @@
 <div class="container-fluid">
 
     @include('partials.messages')
+    @include('partials.errors')
+
+    @if($item->blocked)
+        <div class="row">
+            <div class="col-md-12">
+                <div class="alert alert-danger">This product has been blocked by administrator and cannot be seen by other people!</div>
+            </div>
+        </div>
+    @endif
 
     <div class="row">
         <div class="col-md-11">
@@ -202,65 +211,75 @@
                             @endif
                         @endif
                     @else
-                        @if(Auth::user()->id == $item->user_id)
-                            <div class="row">
-                                <div class="col-sm-12" style="font-size: 25px">
-                                    <div>
-                                        <div><strong>Your item didin't get any bids!</strong></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-12" style="font-size: 25px">
-                                    <div>
+                        @if(Auth::user())
+                            @if(Auth::user()->id == $item->user_id)
+                                <div class="row">
+                                    <div class="col-sm-12" style="font-size: 25px">
                                         <div>
-                                            <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#exampleModalLong">
-                                                Extend auction time!
-                                            </button>
+                                            <div><strong>Your item didin't get any bids!</strong></div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-
-                            <!-- Modal -->
-                            <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h3 class="modal-title" id="exampleModalLongTitle">Extend auction time</h3>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
+                                <div class="row">
+                                    <div class="col-sm-12" style="font-size: 25px">
+                                        <div>
+                                            <div>
+                                                <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#exampleModalLong">
+                                                    Extend auction time!
+                                                </button>
+                                            </div>
                                         </div>
-                                        <div class="modal-body">
+                                    </div>
+                                </div>
 
-                                            <form enctype="multipart/form-data" action="{{ route('items.extendExpirationDate', $item->id) }}" id="createItem" class="form-horizontal" method="POST">
-                                            {{csrf_field()}}
-                                                <div class="form-group auction">
-                                                    <label for="datetimepicker1" class="col-sm-3 control-label">Expiration date</label>
-                                                    <div class="col-sm-9">
-                                                        <div class='input-group date' id='datetimepicker1'>
-                                                            <input type='text' class="form-control" name="expirationDate"/>
-                                                            <span class="input-group-addon">
-                                                                <span class="glyphicon glyphicon-calendar"></span>
-                                                            </span>
+                                <!-- Modal -->
+                                <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h3 class="modal-title" id="exampleModalLongTitle">Extend auction time</h3>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+
+                                                <form enctype="multipart/form-data" action="{{ route('items.extendExpirationDate', $item->id) }}" id="createItem" class="form-horizontal" method="POST">
+                                                {{csrf_field()}}
+                                                    <div class="form-group auction">
+                                                        <label for="datetimepicker1" class="col-sm-3 control-label">Expiration date</label>
+                                                        <div class="col-sm-9">
+                                                            <div class='input-group date' id='datetimepicker1'>
+                                                                <input type='text' class="form-control" name="expirationDate"/>
+                                                                <span class="input-group-addon">
+                                                                    <span class="glyphicon glyphicon-calendar"></span>
+                                                                </span>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="col-sm-offset-3 col-sm-6">
-                                                        <button type="submit" class="btn btn-default">Submit</button>
+                                                    <div class="form-group">
+                                                        <div class="col-sm-offset-3 col-sm-6">
+                                                            <button type="submit" class="btn btn-default">Submit</button>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </form>
+                                                </form>
 
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            @else
+                                <div class="row">
+                                    <div class="col-sm-12" style="font-size: 25px">
+                                        <div>
+                                            <div><strong>Nobody has bid on this auction! :(</strong></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
                         @else
                             <div class="row">
                                 <div class="col-sm-12" style="font-size: 25px">
@@ -287,6 +306,10 @@
                         @if(Auth::user()->isUsersProduct($item->id))
                             <div class="col-md-8">
                                 <div class="alert alert-info">You can't bid on your own item!</div>
+                            </div>
+                        @elseif(Auth::user()->blocked)
+                            <div class="col-md-8">
+                                <div class="alert alert-danger">You have been blocked and cannot bid on the item!</div>
                             </div>
                         @else
                             <div class="col-md-8">
@@ -342,10 +365,7 @@
                     <a href="#mailing" data-toggle="tab">Mailing Services</a>
                 </li>
                 <li>
-                    <a href="#rating" data-toggle="tab">User Rating</a>
-                </li>
-                <li>
-                    <a href="#comments" data-toggle="tab">Comments</a>
+                    <a href="#rating" data-toggle="tab">User Ratings</a>
                 </li>
             </ul>
 
@@ -362,34 +382,94 @@
                     </ul>
                 </div>
                 <div class="tab-pane" id="rating">
-
-                    {{--@if(isset($item->user->ratings))
-
-                    @endif--}}
-
-
-                    <form enctype="multipart/form-data" action="{{ route('rating.submit', $item->user->id) }}" id="createItem" class="form-horizontal" method="POST" >
-                        {{csrf_field()}}
-
+                    @if(count($item->user->ratings))
                         <div class="row">
-                            <div class="col-md-4">
-                                <select class="form-control" name="rating">
-                                    <option value="1">1</option>
-                                    <option value="2">2</option>
-                                    <option value="3">3</option>
-                                    <option value="4">4</option>
-                                    <option value="5">5</option>
-                                </select>
-                            </div>
-                            <div class="col-md-4">
-                                <button type="submit" class="btn btn-success">Submit</button>
+                            <div class="col-md-8">
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th>Rating</th>
+                                        <th>Comment</th>
+                                        <th>Made by</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    @foreach($item->user->ratings as $rating)
+                                        <tr>
+                                            <td>{{ $rating->points }}</td>
+                                            <td>{{ $rating->comment }}</td>
+                                            <td>{{ $rating->getRatingMakerUsername() }}</td>
+                                        </tr>
+                                    @endforeach
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
-                    </form>
+                    @else
+                        <div class="row">
+                            <div class="col-md-8">
+                                No ratings have been submitted!
+                            </div>
+                        </div>
+                    @endif
 
-                </div>
-                <div class="tab-pane" id="comments">
-                    comments
+                    @if(Auth::user())
+                        <form enctype="multipart/form-data" action="{{ route('rating.submit', $item->user->id) }}" class="form-horizontal" method="POST" >
+                            {{csrf_field()}}
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label for="year" class="control-label input-group">Select a rating</label>
+                                    <div class="btn-group" data-toggle="buttons">
+                                        <label class="btn btn-default">
+                                            <input type="radio" name="rating" value="1">1
+                                        </label>
+                                        <label class="btn btn-default">
+                                            <input type="radio" name="rating" value="2">2
+                                        </label>
+                                        <label class="btn btn-default">
+                                            <input type="radio" name="rating" value="3">3
+                                        </label>
+                                        <label class="btn btn-default">
+                                            <input type="radio" name="rating" value="4">4
+                                        </label>
+                                        <label class="btn btn-default">
+                                            <input type="radio" name="rating" value="5">5
+                                        </label>
+                                        <label class="btn btn-default">
+                                            <input type="radio" name="rating" value="6">6
+                                        </label>
+                                        <label class="btn btn-default">
+                                            <input type="radio" name="rating" value="7">7
+                                        </label>
+                                        <label class="btn btn-default">
+                                            <input type="radio" name="rating" value="8">8
+                                        </label>
+                                        <label class="btn btn-default">
+                                            <input type="radio" name="rating" value="9">9
+                                        </label>
+                                        <label class="btn btn-default">
+                                            <input type="radio" name="rating" value="10">10
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    <label for="comment">Leave a comment</label>
+                                    <textarea class="form-control" rows="5" id="comment" name="comment"></textarea>
+                                </div>
+                                <div class="col-md-12">
+                                    <br>
+                                    <button type="submit" class="btn btn-success">Submit</button>
+                                </div>
+                            </div>
+                        </form>
+                    @else
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="alert alert-danger">Can't leave a rating while not logged in!</div>
+                            </div>
+                        </div>
+                    @endif
                 </div>
             </div>
 
@@ -539,3 +619,4 @@
 
     @include('partials.errors')
 </script>
+

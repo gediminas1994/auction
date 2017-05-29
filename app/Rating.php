@@ -10,4 +10,9 @@ class Rating extends Model
     {
         return $this->belongsTo('App\User');
     }
+
+    public function getRatingMakerUsername(){
+        $user = User::find($this->rated_by_user_id);
+        return $user->username;
+    }
 }

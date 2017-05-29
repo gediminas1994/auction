@@ -14,6 +14,7 @@
 Route::pattern('user', '[0-9]+');*/
 
 Route::get('/', ['as' => 'welcome', 'uses' => 'WelcomeController@index']);
+Route::get('/information', ['as' => 'information', 'uses' => 'WelcomeController@information']);
 
 Auth::routes();
 
@@ -30,7 +31,7 @@ Route::group(['prefix' => 'search'], function () {
     Route::get('/{category}', ['as' => 'search.category', 'uses' => 'SearchController@category']);
 });
 
-Route::group(['prefix' => 'admin', 'namespace' => 'admin', 'middleware' => 'auth'], function (){
+Route::group(['prefix' => 'admin', 'namespace' => 'admin', 'middleware' => ['auth', \App\Http\Middleware\IsAdmin::class]], function (){
     Route::group(['prefix' => 'users'], function () {
         //user CRUD as admin
         Route::get('/', ['as' => 'admin.users.index', 'uses' => 'UsersController@index']);
@@ -66,6 +67,8 @@ Route::group(['prefix' => 'user', 'namespace' => 'user', 'middleware' => 'auth']
     Route::get('/{user}/bankAccounts/{bankRecord}/edit', ['as' => 'user.bankAccounts.edit', 'uses' => 'BankAccountsController@edit']);
     Route::patch('/{user}/bankAccounts/{bankRecord}', ['as' => 'user.bankAccounts.update', 'uses' => 'BankAccountsController@update']);
     Route::delete('/{user}/bankAccounts/{bankRecord}', ['as' => 'user.bankAccounts.destroy', 'uses' => 'BankAccountsController@destroy']);
+
+    Route::get('/{user}/bidHistory', ['as' => 'user.bidHistory', 'uses' => 'BidHistoryController@showBidHistory']);
 });
 
 Route::group(['prefix' => 'items'], function () {
@@ -79,6 +82,9 @@ Route::group(['prefix' => 'items'], function () {
     Route::get('/{item}/edit', ['as' => 'items.edit', 'uses' => 'ItemController@edit']);
     Route::patch('/{item}', ['as' => 'items.update', 'uses' => 'ItemController@update']);
     Route::delete('/{item}', ['as' => 'items.destroy', 'uses' => 'ItemController@destroy']);
+
+    //buy regular item
+    Route::post('/{item}/buyRegularItem', ['as' => 'items.buyRegularItem', 'uses' => 'ItemController@buyRegularItem']);
 
     //Extend auction item expirationDate
     Route::post('/expire/{item}', ['as' => 'items.extendExpirationDate', 'uses' => 'ItemController@extendExpirationDate']);

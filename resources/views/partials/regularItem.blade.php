@@ -1,4 +1,8 @@
 <div class="container-fluid">
+
+    @include('partials.messages')
+    @include('partials.errors')
+
     <div class="row">
         <div class="col-md-11">
             <i class="fa fa-cubes fa-3x" aria-hidden="true"></i>
@@ -59,99 +63,158 @@
             </div><!-- end row -->
 
             <div class="row add-to-cart">
-                <div class="col-sm-12 product-qty">
-                            <span class="btn btn-default btn-sm">
-                                <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
-                            </span>
-                    <span>
-                                <input type="number" min="1" max="{{ $item->quantity }}" class="btn btn-default btn-sm"
-                                       value="1"/>
-                            </span>
-                    <span class="btn btn-default btn-sm">
-                                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-                            </span>
+                <form enctype="multipart/form-data" action="{{ route('items.buyRegularItem', $item) }}" class="form-horizontal" method="POST" >
+                    {{csrf_field()}}
 
-                    <span class="text-right">Quantity: </span>
-                    <span class="text-right" style="color: red; font-size: 25px">{{ $item->quantity }}</span>
-                </div>
+                    <div class="col-sm-12 product-qty">
+                        <span class="btn btn-default btn-sm">
+                            <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+                        </span>
+                        <span>
+                            <input type="number" min="1" max="{{ $item->quantity }}" class="btn btn-default btn-sm" value="1" name="quantityEntered"/>
+                        </span>
+                        <span class="btn btn-default btn-sm">
+                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                        </span>
+
+                        <span class="text-right">Quantity: </span>
+                        <span class="text-right" style="color: red; font-size: 25px">{{ $item->quantity }}</span>
+                    </div>
+
+                    <div class="col-sm-12">
+                        <button class="btn btn-success" type="submit">Buy</button>
+                    </div>
+                </form>
             </div><!-- end row -->
 
             <br>
 
-            <div class="row">
-                <div class="col-md-12">
-                    <!-- Nav tabs -->
-                    <ul class="nav nav-tabs" role="tablist">
-                        <li class="active">
-                            <a href="#description" data-toggle="tab">Description</a>
-                        </li>
-                        <li>
-                            <a href="#mailing" data-toggle="tab">Mailing Services</a>
-                        </li>
-                        <li>
-                            <a href="#rating" data-toggle="tab">User Rating</a>
-                        </li>
-                        <li>
-                            <a href="#comments" data-toggle="tab">Comments</a>
-                        </li>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-md-12">
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="active">
+                    <a href="#description" data-toggle="tab">Description</a>
+                </li>
+                <li>
+                    <a href="#mailing" data-toggle="tab">Mailing Services</a>
+                </li>
+                <li>
+                    <a href="#rating" data-toggle="tab">User Ratings</a>
+                </li>
+            </ul>
+
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <div class="tab-pane active" id="description">
+                    <div>{{ $item->description }}</div>
+                </div>
+                <div class="tab-pane" id="mailing">
+                    <ul>
+                        @foreach($item->mailing_services as $mailing_service)
+                            <li>{{ $mailing_service->title }}</li>
+                        @endforeach
                     </ul>
-
-                    <!-- Tab panes -->
-                    <div class="tab-content">
-                        <div class="tab-pane active" id="description">
-                            <div>{{ $item->description }}</div>
+                </div>
+                <div class="tab-pane" id="rating">
+                    @if(count($item->user->ratings))
+                        <div class="row">
+                            <div class="col-md-8">
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th>Rating</th>
+                                        <th>Comment</th>
+                                        <th>Made by</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    @foreach($item->user->ratings as $rating)
+                                        <tr>
+                                            <td>{{ $rating->points }}</td>
+                                            <td>{{ $rating->comment }}</td>
+                                            <td>{{ $rating->getRatingMakerUsername() }}</td>
+                                        </tr>
+                                    @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
-                        <div class="tab-pane" id="mailing">
-                            <ul>
-                                @foreach($item->mailing_services as $mailing_service)
-                                    <li>{{ $mailing_service->title }}</li>
-                                @endforeach
-                            </ul>
+                    @else
+                        <div class="row">
+                            <div class="col-md-8">
+                                No ratings have been submitted!
+                            </div>
                         </div>
-                        <div class="tab-pane" id="rating">
-                            @if($item->user->rating)
-                                <span>This Users Rating is: </span>
-                                <span>{{ number_format($item->user->rating->total_rating/$item->user->rating->times_rated, 2) }}
-                                    <b>/5</b></span>
-                            @else
-                                <div>This user has not been rated yet!</div>
-                            @endif
+                    @endif
 
-                            <br>
-                            <div>Give this user a rating!</div>
+                    @if(Auth::user())
+                        <form enctype="multipart/form-data" action="{{ route('rating.submit', $item->user->id) }}" class="form-horizontal" method="POST" >
+                            {{csrf_field()}}
 
-                            <form enctype="multipart/form-data" action="{{ route('rating.submit', $item->user->id) }}"
-                                  id="createItem" class="form-horizontal" method="POST">
-                                {{csrf_field()}}
-
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <select class="form-control" name="rating">
-                                            <option value="1">1</option>
-                                            <option value="2">2</option>
-                                            <option value="3">3</option>
-                                            <option value="4">4</option>
-                                            <option value="5">5</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <button type="submit" class="btn btn-success">Submit</button>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label for="year" class="control-label input-group">Select a rating</label>
+                                    <div class="btn-group" data-toggle="buttons">
+                                        <label class="btn btn-default">
+                                            <input type="radio" name="rating" value="1">1
+                                        </label>
+                                        <label class="btn btn-default">
+                                            <input type="radio" name="rating" value="2">2
+                                        </label>
+                                        <label class="btn btn-default">
+                                            <input type="radio" name="rating" value="3">3
+                                        </label>
+                                        <label class="btn btn-default">
+                                            <input type="radio" name="rating" value="4">4
+                                        </label>
+                                        <label class="btn btn-default">
+                                            <input type="radio" name="rating" value="5">5
+                                        </label>
+                                        <label class="btn btn-default">
+                                            <input type="radio" name="rating" value="6">6
+                                        </label>
+                                        <label class="btn btn-default">
+                                            <input type="radio" name="rating" value="7">7
+                                        </label>
+                                        <label class="btn btn-default">
+                                            <input type="radio" name="rating" value="8">8
+                                        </label>
+                                        <label class="btn btn-default">
+                                            <input type="radio" name="rating" value="9">9
+                                        </label>
+                                        <label class="btn btn-default">
+                                            <input type="radio" name="rating" value="10">10
+                                        </label>
                                     </div>
                                 </div>
-                            </form>
-
+                                <div class="col-md-5">
+                                    <label for="comment">Leave a comment</label>
+                                    <textarea class="form-control" rows="5" id="comment" name="comment"></textarea>
+                                </div>
+                                <div class="col-md-12">
+                                    <br>
+                                    <button type="submit" class="btn btn-success">Submit</button>
+                                </div>
+                            </div>
+                        </form>
+                    @else
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="alert alert-danger">Can't leave a rating while not logged in!</div>
+                            </div>
                         </div>
-                        <div class="tab-pane" id="comments">
-                            comments
-                        </div>
-                    </div>
+                    @endif
 
-                    <div class="row">
-                        <div class="col-md-12" style="height: 200px;"></div>
-                    </div>
                 </div>
             </div>
 
+            <div class="row">
+                <div class="col-md-12" style="height: 200px;"></div>
+            </div>
         </div>
     </div>
 </div>

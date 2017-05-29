@@ -15,4 +15,8 @@ class WelcomeController extends Controller
 
         return view('welcome')->with('items', $items);
     }
+
+    public function information(){
+        return view('partials.information');
+    }
 }

@@ -29,7 +29,7 @@ class BidController extends Controller
 
         $item = Product::find($item_id);
         $currentMaxBid = $item->bids()->max('amount');
-        //jeigu nera bidu ima startine autoriaus nustatyta kaina
+        //If there are no bids, currentMaxBid is given the default startingBid
         if(!$currentMaxBid){
             $currentMaxBid = $item->startingBid;
         }
@@ -47,7 +47,7 @@ class BidController extends Controller
             return $currentMaxBid >= $value['lowest'] && $currentMaxBid <= $value['highest'];
         })->collapse();
 
-        //kiek reikia pastatyt, kad butu valid bidas
+        //How much you have to bid, for it to be valid
         $minBidNeeded = $currentMaxBid + $fittingValues['minimumDifference'];
 
         if ($bid_amount < $minBidNeeded) {
@@ -57,6 +57,5 @@ class BidController extends Controller
             $success = $this->BiddingService->bid($bid_amount, $item_id, $user_id);
             return response()->json($success);
         }
-
     }
 }

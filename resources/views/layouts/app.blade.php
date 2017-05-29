@@ -78,6 +78,10 @@
                         </form>
                     </div>
 
+                    <ul class="nav navbar-nav">
+                        <li><a href="{{ route('information') }}">Information</a></li>
+                    </ul>
+
                     <!-- Right Side Of Navbar -->
                     <ul class="nav navbar-nav navbar-right">
 
@@ -113,6 +117,10 @@
 
                                         <a href="{{ route('items.showFavorites') }}">
                                             <i class="fa fa-star" aria-hidden="true"></i> Favorites
+                                        </a>
+
+                                        <a href="{{ route('user.bidHistory', Auth::user()) }}">
+                                            <i class="fa fa-history" aria-hidden="true"></i> Bid History
                                         </a>
 
                                         <a href="{{ route('logout') }}"
@@ -165,7 +173,7 @@
                                 @if(Auth::user())
                                     @if(Auth::user()->blocked)
                                         <div class="alert alert-danger">
-                                            <strong>You have been blocked, so you can't add items!</strong>
+                                            <strong>You have been blocked, so you can't add items and bid on others!</strong>
                                         </div>
                                     @endif
                                 @endif

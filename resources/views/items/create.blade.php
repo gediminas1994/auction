@@ -113,11 +113,27 @@
 			</div>
 		</div>
 
-		<div class="form-group">
-			<div class="col-sm-offset-2 col-sm-8">
-				<button type="submit" class="btn btn-default">Submit</button>
+		@if(!Auth::user()->blocked)
+			@if(count(Auth::user()->bankAccount))
+				<div class="form-group">
+					<div class="col-sm-offset-2 col-sm-8">
+						<button type="submit" class="btn btn-default">Submit</button>
+					</div>
+				</div>
+			@else
+				<div class="form-group">
+					<div class="col-sm-offset-2 col-sm-8">
+						<div class="alert alert-warning">Cannot create a product if you haven't provided at least one bank account!</div>
+					</div>
+				</div>
+			@endif
+		@else
+			<div class="row">
+				<div class="col-sm-offset-2 col-sm-8">
+					<div class="alert alert-danger">Cannot add items!</div>
+				</div>
 			</div>
-		</div>
+		@endif
 
 	</form>
 	@include('partials.errors')
