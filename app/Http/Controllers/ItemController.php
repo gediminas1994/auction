@@ -48,7 +48,7 @@ class ItemController extends Controller
             'mailing_services' => 'required',
             'picture' => 'required',
             'expirationDate' => 'required_if:type,0',
-            'startingBid' => 'required_if:type,0',
+            'startingBid' => 'required_if:type,0|numeric|min:0',
             'quantity' => 'required_if:type,1',
             'price' => 'required_if:type,1'
         ]);
