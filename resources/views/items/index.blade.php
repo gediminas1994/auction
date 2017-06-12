@@ -25,8 +25,8 @@
                                 <h4 class="group inner list-group-item-heading">
                                     {{ $item->title }}</h4>
                                 <p class="group inner list-group-item-text">
-                                    Product description... Lorem ipsum dolor sit amet, consectetuer adipiscing elit,
-                                    sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</p>
+                                    {{ $item->description }}
+                                </p>
                                 <br>
                                 <div class="row">
                                     <div class="col-md-12">
